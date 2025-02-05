@@ -1,0 +1,7 @@
+.App {
+  min-height: calc(100vh - 4.75rem);
+
+  &.Bottom {
+    padding-bottom: 4.75rem;
+  }
+}

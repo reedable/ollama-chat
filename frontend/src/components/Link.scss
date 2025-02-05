@@ -1,0 +1,11 @@
+@import '@components/Button.scss';
+@import '@styles/Animation.scss';
+
+.Link {
+  color: var(--color-cyan);
+  display: inline-block;
+}
+
+.ButtonLink {
+  @include Button;
+}

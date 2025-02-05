@@ -1,0 +1,48 @@
+:root {
+  --button-border-radius: 0.5rem;
+}
+
+@mixin Button {
+  align-items: center;
+  background-color: var(--color-light-blue);
+  border: 0;
+  border-radius: var(--button-border-radius);
+  color: var(--color-white);
+  cursor: pointer;
+  display: flex;
+  font-size: 0.875rem;
+  font-family: sans-serif;
+  font-weight: bold;
+  justify-content: center;
+  padding: 0.5rem 0.5rem;
+  text-decoration: none;
+
+  @media (prefers-color-scheme: light) {
+    color: var(--color-black);
+  }
+}
+
+@mixin ButtonHover {
+  text-decoration: underline;
+}
+
+.Button {
+  @include Button;
+
+  & > div,
+  & > span {
+    display: inline-block;
+    font-size: 0.875rem;
+    margin-left: 0.25rem;
+
+    &:first-child {
+      margin-left: 0;
+    }
+  }
+
+  @media (hover: hover) {
+    &:hover {
+      @include ButtonHover;
+    }
+  }
+}

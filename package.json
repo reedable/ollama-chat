@@ -1,0 +1,26 @@
+{
+  "name": "ollama-chat",
+  "version": "1.0.0",
+  "description": "HTTP server/client with Ollama backend.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "============ Start ============": "",
+    "start": "npx concurrently 'npm run start:backend' 'npm run start:ollama' ",
+    "start:ollama": "ollama serve",
+    "start:mongodb": "brew services start mongodb/brew/mongodb-community",
+    "start:backend": "npm --prefix backend start",
+    "============ Stop ============": "",
+    "stop": "npx concurrently 'npm run stop:ollama' 'npm run stop:mongodb' ",
+    "stop:ollama": "pkill ollama",
+    "stop:mongodb": "brew services stop mongodb/brew/mongodb-community",
+    "============ Build ============": "",
+    "build": "echo 'implement me'",
+    "build:frontend": "echo 'implement me'"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "concurrently": "^9.1.2"
+  }
+}

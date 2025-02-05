@@ -1,0 +1,81 @@
+.FullWidth {
+  width: 100%;
+}
+
+.Opacity_02 {
+  opacity: 0.2;
+}
+
+.Flex {
+  display: flex;
+}
+
+.FlexRow {
+  composes: Flex;
+  flex-direction: row;
+}
+
+.FlexColumn {
+  composes: Flex;
+  flex-direction: column;
+}
+
+// justify-content
+
+.JustifyCenter {
+  justify-content: center;
+}
+
+.JustifySpaceBetween {
+  justify-content: space-between;
+}
+
+.JustifySpaceEvenly {
+  justify-content: space-evenly;
+}
+
+.JustifyStart {
+  justify-content: flex-start;
+}
+
+.JustifyEnd {
+  justify-content: flex-end;
+}
+
+// align-items
+
+.AlignBaseline {
+  align-items: baseline;
+}
+
+.AlignCenter {
+  align-items: center;
+}
+
+.AlignEnd {
+  align-items: flex-end;
+}
+
+.AlignStart {
+  align-items: flex-start;
+}
+
+// flex-wrap
+
+.Wrap {
+  flex-wrap: wrap;
+}
+
+.NoWrap {
+  flex-wrap: nowrap;
+}
+
+// FIXME Need to organize the code below
+
+.TextCenter {
+  text-align: center;
+}
+
+.OverflowHidden {
+  overflow: hidden;
+}
