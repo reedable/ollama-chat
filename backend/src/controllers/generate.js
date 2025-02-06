@@ -1,6 +1,6 @@
 import ollama from '../services/ollama.js';
 
-export default async (req, res) => {
+export default async function generate(req, res) {
   const { MODEL_NAME } = process.env;
   res.setHeader('Content-Type', 'text/plain');
   res.setHeader('Transfer-Encoding', 'chunked');
@@ -29,4 +29,4 @@ export default async (req, res) => {
     console.error('Error generating response', error);
     res.status(500).send('Error generating response');
   }
-};
+}

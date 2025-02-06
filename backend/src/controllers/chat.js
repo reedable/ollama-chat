@@ -1,42 +1,6 @@
 import ollama from '../services/ollama.js';
-import Conversation from '../models/Conversation.js';
 
-export async function sanitizePrompt(req, res, next) {
-  // TODO Validate and sanitize prompt
-  const { prompt } = req.body;
-  if (!prompt) {
-    return res.status(400).json({ error: 'prompt is required' });
-  }
-
-  next();
-}
-
-export async function loadConversation(req, res, next) {
-  try {
-    const { userId, conversationId } = req.body;
-
-    // TODO Load conversation history by userId, conversationId
-    let conversation = await Conversation.findOne({ userId });
-
-    if (!conversation) {
-      conversation = new Conversation({ userId, messages: [] });
-    }
-
-    req.conversation = conversation;
-
-    res.on('finish', () => {
-      conversation.messages.splice(0, conversation.messages.length - 8);
-      conversation.save();
-    });
-
-    next();
-  } catch (e) {
-    // FIXME #1 Gracefully switch to /generate if MongoDB is unavailable
-    throw e;
-  }
-}
-
-export default async (req, res) => {
+export default async function chat(req, res) {
   const { MODEL_NAME } = process.env;
   res.setHeader('Content-Type', 'text/plain');
   res.setHeader('Transfer-Encoding', 'chunked');
@@ -73,4 +37,4 @@ export default async (req, res) => {
     console.error('Error generating response', error);
     res.status(500).send('Error generating response');
   }
-};
+}
