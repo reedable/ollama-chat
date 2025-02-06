@@ -4,15 +4,19 @@ An HTTP server/client with Ollama backend.
 
 ## Getting started
 
+This project requires the following third-party software and a model.
+
+- Ollama
+- deepseek-r1:1.5b
+- MongoDB (optional)
+
 ### Prerequisites
 
 - Homebrew
 - Node.js
 - NPM
-- Ollama
-- deepseek-r1:1.5b
 
-### Install and run Ollama
+### Install and run Ollama with DeepSeek
 
 Ollama is an open-source framework for running large language models (LLMs)
 locally on your machine without relying on cloud-based APIs. It allows you to
@@ -59,3 +63,14 @@ npm run start
 Visit:
 
 http://localhost:8080
+
+<picture>
+  <source
+    srcset="docs/images/conversation-dark.png"
+    media="(prefers-color-scheme: dark)">
+  <img
+    src="docs/images/conversation-light.png"
+    style="box-shadow: 0.25rem .25rem 1rem rgba(0,0,0,0.3); border-radius: 0.5rem;"
+    width="300"
+    alt="Screenshot with user prompt 'Hello, what is your name?' and the AI response, 'Greetings! I'm DeepSeek-R1, an artificial intelligence assistant created by DeepSeek. I'm at your service and would be delighted to assist you with any inquiries or tasks you may have.'">
+</picture>

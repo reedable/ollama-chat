@@ -1,6 +1,8 @@
 import mongoose from 'mongoose';
 
-const chatSchema = new mongoose.Schema({
+//TODO Rename this to Conversation
+
+const conversationSchema = new mongoose.Schema({
   userId: String,
   conversationId: String,
   messages: [
@@ -12,4 +14,4 @@ const chatSchema = new mongoose.Schema({
   ],
 });
 
-export default mongoose.model('Chat', chatSchema);
+export default mongoose.model('Conversation', conversationSchema);

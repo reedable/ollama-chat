@@ -6,7 +6,7 @@ import { createRoot } from 'react-dom/client';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import 'reset-css';
 import App from './App/App';
-import Chat from './App/Chat/Chat';
+import Conversation from './App/Chat/Conversation.jsx';
 import './index.css';
 
 const BASENAME = '/';
@@ -20,7 +20,7 @@ const router = createBrowserRouter(
       path: '/',
       element: (
         <App>
-          <Chat />
+          <Conversation />
         </App>
       ),
     },

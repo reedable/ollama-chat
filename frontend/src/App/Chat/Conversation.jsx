@@ -1,21 +1,23 @@
-import GlobalContent from '@content/Global.yaml';
+import globalContent from '@content/Global.yaml';
 import useContent from '@hooks/useContent';
 import DOM from '@utils/DOM';
 import Logger from '@utils/Logger';
 import React, { useState } from 'react';
 import Card from './Card';
-import * as Styles from './Chat.scss';
-import ChatContent from './Chat.yaml';
+import * as styles from './Conversation.scss';
+import content from './Conversation.yaml';
 import UserInput from './UserInput';
 
-export default function Chat({ className }) {
+// TODO Rename this to Conversation
+
+export default function Conversation({ className }) {
   const _logger = new Logger('Chat');
-  const { ChatScreenHeader } = useContent(GlobalContent, ChatContent);
+  const { ChatScreenHeader } = useContent(globalContent, content);
   const [chatHistory, setChatHistory] = useState([]);
   const [userInput, setUserInput] = useState('');
 
   return (
-    <div className={DOM.classNames(className, Styles.Chat)}>
+    <div className={DOM.classNames(className, styles.Chat)}>
       <h1>{ChatScreenHeader()}</h1>
 
       <ul>
