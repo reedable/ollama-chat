@@ -11,7 +11,7 @@ export default function useFetchStream() {
 
     return new Promise(async (resolve, reject) => {
       let buffer = '';
-      let think = '';
+      let reasoning = '';
       let answer = '';
 
       try {
@@ -26,19 +26,19 @@ export default function useFetchStream() {
 
           buffer += chunk;
 
-          const startThink = buffer.indexOf('<think>');
-          const endThink = buffer.indexOf('</think>');
+          const startReasoning = buffer.indexOf('<think>');
+          const endReasoning = buffer.indexOf('</think>');
           const split = chunk.replace('<think>').split('</think>');
 
-          if (startThink !== -1 && endThink == -1) {
-            think = split[0];
+          if (startReasoning !== -1 && endReasoning == -1) {
+            reasoning = split[0];
           }
 
-          if (endThink !== -1) {
+          if (endReasoning !== -1) {
             answer = split[1] || split[0];
           }
 
-          callback({ think, answer });
+          callback(reasoning, answer);
         }
 
         resolve(buffer);

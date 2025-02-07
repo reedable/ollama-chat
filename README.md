@@ -10,6 +10,9 @@ This project requires the following third-party software and a model.
 - deepseek-r1:1.5b
 - MongoDB (optional)
 
+If your machine is capable, consider pulling models with a larger number of
+parameters: 7b, 8b, 14b, 32b, 70b, 671b, or the full R1 model.
+
 ### Prerequisites
 
 - Homebrew

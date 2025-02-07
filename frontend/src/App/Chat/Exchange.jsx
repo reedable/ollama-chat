@@ -1,12 +1,20 @@
 import * as animation from '@styles/Animation.scss';
 import Logger from '@utils/Logger';
 import React, { useEffect, useRef } from 'react';
-import { ExclamationCircleFill, Eye, Lightbulb } from 'react-bootstrap-icons';
+import {
+  Copy,
+  ExclamationCircleFill,
+  Eye,
+  HandThumbsDown,
+  HandThumbsUp,
+  Lightbulb,
+  XCircle,
+} from 'react-bootstrap-icons';
 import ReactMarkdown from 'react-markdown';
-import * as styles from './Card.scss';
+import * as styles from './Exchange.scss';
 
-export default function Card({ className, card }) {
-  const _logger = new Logger('Card');
+export default function Exchange({ className, exchange }) {
+  const _logger = new Logger('Exchange');
   const promptRef = useRef(null);
 
   useEffect(() => {
@@ -14,11 +22,11 @@ export default function Card({ className, card }) {
   }, []);
 
   return (
-    <div className={styles.Card}>
+    <div className={styles.Exchange}>
       <div ref={promptRef} className={`${styles.Bubble} ${styles.Prompt}`}>
-        {card.prompt}
+        {exchange.prompt}
       </div>
-      {!card.error && !card.think && !card.answer && (
+      {!exchange.error && !exchange.reasoning && !exchange.answer && (
         <div class={styles.Status}>
           <div className={animation.BounceLoop}>
             <Eye />
@@ -26,7 +34,7 @@ export default function Card({ className, card }) {
           <div>Reading...</div>
         </div>
       )}
-      {!card.error && card.think && !card.answer && (
+      {!exchange.error && exchange.reasoning && !exchange.answer && (
         <div class={styles.Status}>
           <div class={animation.BounceLoop}>
             <Lightbulb />
@@ -34,10 +42,19 @@ export default function Card({ className, card }) {
           <div>Thinking...</div>
         </div>
       )}
-      <div className={`${styles.Answer}`}>
-        <ReactMarkdown>{card.answer}</ReactMarkdown>
-      </div>
-      {card.error && (
+      {exchange.answer && (
+        <>
+          <div className={`${styles.Answer}`}>
+            <ReactMarkdown>{exchange.answer}</ReactMarkdown>
+          </div>
+          {/*TODO Show the toolbar only when the response is done*/}
+          <div>
+            <Copy /> <HandThumbsUp /> <HandThumbsDown /> <Lightbulb />{' '}
+            <XCircle />
+          </div>
+        </>
+      )}
+      {exchange.error && (
         <div class={styles.Status}>
           <div>
             <ExclamationCircleFill />

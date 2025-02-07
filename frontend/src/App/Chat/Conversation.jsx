@@ -3,7 +3,7 @@ import useContent from '@hooks/useContent';
 import DOM from '@utils/DOM';
 import Logger from '@utils/Logger';
 import React, { useEffect, useState } from 'react';
-import Card from './Card';
+import Exchange from './Exchange';
 import * as styles from './Conversation.scss';
 import content from './Conversation.yaml';
 import UserInput from './UserInput';
@@ -11,7 +11,7 @@ import UserInput from './UserInput';
 // TODO Rename this to Conversation
 
 export default function Conversation({ className }) {
-  const _logger = new Logger('Chat');
+  const _logger = new Logger('Conversation');
   const { ChatScreenHeader } = useContent(globalContent, content);
   const [conversation, setConversation] = useState([]);
   const [userInput, setUserInput] = useState('');
@@ -25,20 +25,20 @@ export default function Conversation({ className }) {
     const json = await response.json();
 
     setConversation(
-      json.messages.reduce((cards, message) => {
+      json.messages.reduce((exchange, message) => {
         if (message.role === 'user') {
-          cards.push({ prompt: message.content });
+          exchange.push({ prompt: message.content });
         } else {
-          const lastCard = cards[cards.length - 1];
+          const lastCard = exchange[exchange.length - 1];
           const matches = message.content.match(
             /(<think>[\s\S]*<\/think>)([\s\S]*)/,
           );
 
-          lastCard.think = matches[1];
+          lastCard.reasoning = matches[1];
           lastCard.answer = matches[2];
         }
 
-        return cards;
+        return exchange;
       }, []),
     );
   }, []);
@@ -48,9 +48,9 @@ export default function Conversation({ className }) {
       <h1>{ChatScreenHeader()}</h1>
 
       <ul>
-        {conversation.map((item) => (
-          <li key={item.id}>
-            <Card card={item}></Card>
+        {conversation.map((exchange) => (
+          <li key={exchange.id}>
+            <Exchange exchange={exchange}></Exchange>
           </li>
         ))}
       </ul>

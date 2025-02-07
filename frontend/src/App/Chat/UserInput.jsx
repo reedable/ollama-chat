@@ -11,7 +11,7 @@ export default function UserInput({
   chatHistory,
   setChatHistory,
 }) {
-  const _logger = new Logger('Prompt');
+  const _logger = new Logger('UserInput');
   const [inProgress, setInProgress] = useState(false);
   const userInputRef = useRef(null); // For auto-resizing
   const controllerRef = useRef(null);
@@ -60,7 +60,7 @@ export default function UserInput({
     domEvent.preventDefault();
     const id = uuidv4();
     const prompt = userInput; //FIXME Sanitize input?
-    const item = { id, prompt, answer: '' };
+    const exchange = { id, prompt, answer: '' };
 
     if (inProgress) {
       try {
@@ -76,7 +76,7 @@ export default function UserInput({
       return;
     }
 
-    setChatHistory([...chatHistory, item]);
+    setChatHistory([...chatHistory, exchange]);
     setInProgress(true);
 
     try {
@@ -89,14 +89,12 @@ export default function UserInput({
           body: JSON.stringify({ prompt: prompt }),
           signal,
         },
-        ({ think, answer }) => {
-          item.think += think;
-          item.answer += answer;
+        (reasoning, answer) => {
+          exchange.reasoning += reasoning;
+          exchange.answer += answer;
 
-          setChatHistory((prevItems) =>
-            prevItems.map((prevItem) =>
-              prevItem.id === item.id ? item : prevItem,
-            ),
+          setChatHistory((prevExchanges) =>
+            prevExchanges.map((e) => (e.id === exchange.id ? exchange : e)),
           );
         },
       );
@@ -106,11 +104,11 @@ export default function UserInput({
       console.debug(result);
     } catch (e) {
       // TODO Implement better error handling
-      item.error = e.t0 || e;
+      exchange.error = e.t0 || e;
 
       setChatHistory((prevItems) =>
         prevItems.map((prevItem) =>
-          prevItem.id === item.id ? item : prevItem,
+          prevItem.id === exchange.id ? exchange : prevItem,
         ),
       );
     }
