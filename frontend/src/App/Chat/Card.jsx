@@ -18,7 +18,7 @@ export default function Card({ className, card }) {
       <div ref={promptRef} className={`${styles.Bubble} ${styles.Prompt}`}>
         {card.prompt}
       </div>
-      {!card.error && !card.think && !card.response && (
+      {!card.error && !card.think && !card.answer && (
         <div class={styles.Status}>
           <div className={animation.BounceLoop}>
             <Eye />
@@ -26,7 +26,7 @@ export default function Card({ className, card }) {
           <div>Reading...</div>
         </div>
       )}
-      {!card.error && card.think && !card.response && (
+      {!card.error && card.think && !card.answer && (
         <div class={styles.Status}>
           <div class={animation.BounceLoop}>
             <Lightbulb />
@@ -35,7 +35,7 @@ export default function Card({ className, card }) {
         </div>
       )}
       <div className={`${styles.Answer}`}>
-        <ReactMarkdown>{card.response}</ReactMarkdown>
+        <ReactMarkdown>{card.answer}</ReactMarkdown>
       </div>
       {card.error && (
         <div class={styles.Status}>

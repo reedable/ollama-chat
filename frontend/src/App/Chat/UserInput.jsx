@@ -60,7 +60,7 @@ export default function UserInput({
     domEvent.preventDefault();
     const id = uuidv4();
     const prompt = userInput; //FIXME Sanitize input?
-    const item = { id, prompt, response: '' };
+    const item = { id, prompt, answer: '' };
 
     if (inProgress) {
       try {
@@ -91,7 +91,7 @@ export default function UserInput({
         },
         ({ think, answer }) => {
           item.think += think;
-          item.response += answer;
+          item.answer += answer;
 
           setChatHistory((prevItems) =>
             prevItems.map((prevItem) =>

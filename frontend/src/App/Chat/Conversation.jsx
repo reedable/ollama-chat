@@ -35,7 +35,7 @@ export default function Conversation({ className }) {
           );
 
           lastCard.think = matches[1];
-          lastCard.response = matches[2];
+          lastCard.answer = matches[2];
         }
 
         return cards;
