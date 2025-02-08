@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link as RouterLink } from 'react-router-dom';
-import DOM from '@utils/DOM';
+import DOM from '@utils/DOM.js';
 import * as Styles from './Link.scss';
 import * as ButtonStyles from '@components/Button.scss';
 

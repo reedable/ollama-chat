@@ -15,12 +15,18 @@
     "stop:ollama": "pkill ollama",
     "stop:mongodb": "brew services stop mongodb/brew/mongodb-community",
     "============ Build ============": "",
-    "build": "echo 'implement me'",
-    "build:frontend": "echo 'implement me'"
+    "build": "npm --prefix frontend run build",
+    "============ Lint ============": "",
+    "lint": "npx eslint frontend/src"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "concurrently": "^9.1.2"
+    "@eslint/js": "^9.20.0",
+    "concurrently": "^9.1.2",
+    "eslint-import-resolver-webpack": "^0.13.10",
+    "eslint-plugin-import": "^2.31.0",
+    "eslint-plugin-react": "^7.37.4",
+    "eslint-plugin-unused-imports": "^4.1.4"
   }
 }

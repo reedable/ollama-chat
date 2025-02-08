@@ -1,4 +1,4 @@
-import Arrays from '@utils/Arrays';
+import Arrays from '@utils/Arrays.js';
 
 function reduceEntries(object, [key, value]) {
   object[key] = value;

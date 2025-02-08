@@ -1,6 +1,6 @@
-import useContent from '@hooks/useContent';
+import useContent from '@hooks/useContent.jsx';
 import * as animation from '@styles/Animation.scss';
-import Logger from '@utils/Logger';
+import Logger from '@utils/Logger.js';
 import React, { useEffect, useRef } from 'react';
 import * as icons from 'react-bootstrap-icons';
 import ReactMarkdown from 'react-markdown';
@@ -8,8 +8,9 @@ import appContent from '../App.yaml';
 import * as styles from './Exchange.scss';
 import content from './Exchange.yaml';
 import Toolbar from './Toolbar.jsx';
+// import { deleteExchange } from './Exchange.js';
 
-export default function Exchange({ className, exchange }) {
+export default function Exchange({ exchange, onDelete }) {
   const _logger = new Logger('Exchange');
   const promptRef = useRef(null);
   const c = useContent(appContent, content);
@@ -18,8 +19,18 @@ export default function Exchange({ className, exchange }) {
     promptRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [exchange.answer]);
 
+  const handleDelete = (exchangeId) => {
+    try {
+      // await deleteExchange(exchangeId);
+      // TODO Collapse the panel and call onDelete on animationend
+      onDelete(exchangeId);
+    } catch (e) {
+      _logger.error('Error while calling handleDelete', e);
+    }
+  };
+
   return (
-    <div className={styles.Exchange}>
+    <div className={styles.Exchange} data-exchange-id={exchange.exchangeId}>
       <div ref={promptRef} className={`${styles.Bubble} ${styles.Prompt}`}>
         {exchange.prompt}
       </div>
@@ -47,14 +58,14 @@ export default function Exchange({ className, exchange }) {
           <div className={`${styles.Answer}`}>
             <ReactMarkdown>{exchange.answer}</ReactMarkdown>
           </div>
-          <Toolbar exchange={exchange} />
+          <Toolbar exchange={exchange} onDelete={handleDelete} />
         </>
       )}
 
       {exchange.error && (
         <div class={styles.Status}>
           <div>
-            <ExclamationCircleFill />
+            <icons.ExclamationCircleFill />
           </div>
           <div>{c.errorLabel()}</div>
         </div>

@@ -1,4 +1,4 @@
-import DOM from '@utils/DOM';
+import DOM from '@utils/DOM.js';
 import React from 'react';
 import * as Styles from './IconButton.scss';
 

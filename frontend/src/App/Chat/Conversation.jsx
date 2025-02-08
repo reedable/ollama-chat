@@ -1,16 +1,14 @@
-import useContent from '@hooks/useContent';
-import DOM from '@utils/DOM';
-import Logger from '@utils/Logger';
+import useContent from '@hooks/useContent.jsx';
+import Logger from '@utils/Logger.js';
 import React, { useEffect, useState } from 'react';
 import appContent from '../App.yaml';
+import { messagesToConversation } from './Conversation.js';
 import * as styles from './Conversation.scss';
 import content from './Conversation.yaml';
-import Exchange from './Exchange';
-import UserInput from './UserInput';
+import Exchange from './Exchange.jsx';
+import UserInput from './UserInput.jsx';
 
-// TODO Rename this to Conversation
-
-export default function Conversation({ className }) {
+export default function Conversation() {
   const _logger = new Logger('Conversation');
   const { ConversationHeader } = useContent(appContent, content);
   const [conversation, setConversation] = useState([]);
@@ -26,38 +24,34 @@ export default function Conversation({ className }) {
   //      - conversation.length > 0
   //        Loaded conversation from the server
 
-  useEffect(async () => {
-    const response = await fetch('http://localhost:3000/api/conversation', {
-      method: 'GET',
-      headers: { 'Content-Type': 'application/json' },
-    });
+  useEffect(() => {
+    (async function getData() {
+      const response = await fetch('http://localhost:3000/api/conversation', {
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json' },
+      });
 
-    const json = await response.json();
-
-    setConversation(
-      json.messages
-        .reduce((exchange, message) => {
-          if (message.role === 'user') {
-            exchange.push({ prompt: message.content });
-          } else {
-            const lastCard = exchange[exchange.length - 1];
-            lastCard.answer = message.content;
-          }
-
-          return exchange;
-        }, [])
-        .filter((e) => e.answer),
-    );
+      const json = await response.json();
+      const conversation = messagesToConversation(json.messages);
+      setConversation(conversation);
+    })();
   }, []);
 
+  const handleDeleteExchange = async (exchangeId) => {
+    setConversation(conversation.filter((e) => e.exchangeId !== exchangeId));
+  };
+
   return (
-    <div className={DOM.classNames(className, styles.Chat)}>
+    <div className={styles.Conversation}>
       <h1>{ConversationHeader()}</h1>
 
       <ul>
         {conversation.map((exchange) => (
           <li key={exchange.exchangeId}>
-            <Exchange exchange={exchange}></Exchange>
+            <Exchange
+              exchange={exchange}
+              onDelete={handleDeleteExchange}
+            ></Exchange>
           </li>
         ))}
       </ul>
@@ -65,8 +59,8 @@ export default function Conversation({ className }) {
       <UserInput
         userInput={userInput}
         setUserInput={setUserInput}
-        chatHistory={conversation}
-        setChatHistory={setConversation}
+        conversation={conversation}
+        setConversation={setConversation}
       ></UserInput>
     </div>
   );

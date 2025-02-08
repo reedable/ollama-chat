@@ -1,21 +1,24 @@
 import Button from '@components/Button';
+import useContent from '@hooks/useContent.jsx';
 import useFetchStream from '@hooks/useFetchStream';
-import Logger from '@utils/Logger';
+import Logger from '@utils/Logger.js';
 import React, { useEffect, useRef, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
+import * as styles from './UserInput.scss';
+import content from './UserInput.yaml';
 
 export default function UserInput({
-  className,
   userInput,
   setUserInput,
-  chatHistory,
-  setChatHistory,
+  conversation,
+  setConversation,
 }) {
   const _logger = new Logger('UserInput');
   const [inProgress, setInProgress] = useState(false);
   const userInputRef = useRef(null); // For auto-resizing
   const controllerRef = useRef(null);
   const [fetchStream] = useFetchStream();
+  const c = useContent(content);
 
   useEffect(() => {
     if (!controllerRef.current) {
@@ -76,7 +79,7 @@ export default function UserInput({
       return;
     }
 
-    setChatHistory([...chatHistory, exchange]);
+    setConversation([...conversation, exchange]);
     setInProgress(true);
 
     try {
@@ -96,7 +99,7 @@ export default function UserInput({
           exchange.startTs = startTs;
           exchange.endTs = Date.now();
 
-          setChatHistory((prevExchanges) =>
+          setConversation((prevExchanges) =>
             prevExchanges.map((e) =>
               e.exchangeId === exchange.exchangeId ? exchange : e,
             ),
@@ -111,7 +114,7 @@ export default function UserInput({
       // TODO Implement better error handling
       exchange.error = e.t0 || e;
 
-      setChatHistory((prevItems) =>
+      setConversation((prevItems) =>
         prevItems.map((e) =>
           e.exchangeId === exchange.exchangeId ? exchange : e,
         ),
@@ -120,7 +123,8 @@ export default function UserInput({
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form className={styles.UserInput} onSubmit={handleSubmit}>
+      {/* TODO Turn textarea into a component */}
       <textarea
         ref={userInputRef}
         rows="1"
@@ -128,7 +132,9 @@ export default function UserInput({
         disabled={inProgress}
         onChange={(domEvent) => setUserInput(domEvent.target.value)}
       ></textarea>
-      <Button type="submit">{inProgress ? <>Stop</> : <>Send</>}</Button>
+      <Button type="submit">
+        {inProgress ? c.abortLabel() : c.submitLabel()}
+      </Button>
     </form>
   );
 }

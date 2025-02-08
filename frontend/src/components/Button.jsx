@@ -1,4 +1,4 @@
-import DOM from '@utils/DOM';
+import DOM from '@utils/DOM.js';
 import React, { useEffect, useRef } from 'react';
 import * as Styles from './Button.scss';
 import * as animation from '@styles/Animation.scss';

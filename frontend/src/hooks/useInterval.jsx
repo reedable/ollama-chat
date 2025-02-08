@@ -1,4 +1,4 @@
-import Logger from '@utils/Logger';
+import Logger from '@utils/Logger.js';
 import { useRef, useState } from 'react';
 
 export default function useInterval({ delay = 1000, strict = false } = {}) {

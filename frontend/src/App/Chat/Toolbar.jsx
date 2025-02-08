@@ -1,6 +1,6 @@
 import useContent from '@hooks/useContent.jsx';
 import Clipboard from '@utils/Clipboard.js';
-import Logger from '@utils/Logger';
+import Logger from '@utils/Logger.js';
 import React from 'react';
 import * as icons from 'react-bootstrap-icons';
 import appContent from '../App.yaml';
@@ -8,7 +8,7 @@ import Charm from './Charm.jsx';
 import * as styles from './Toolbar.scss';
 import content from './Toolbar.yaml';
 
-export default function Toolbar({ exchange }) {
+export default function Toolbar({ exchange, onDelete }) {
   const _logger = new Logger('Toolbar');
   const c = useContent(appContent, content);
 
@@ -30,7 +30,8 @@ export default function Toolbar({ exchange }) {
   };
 
   const handleDelete = (domEvent) => {
-    _logger.debug('DELETE', domEvent);
+    _logger.debug('DELETE', exchange.exchangeId);
+    onDelete(exchange.exchangeId);
   };
 
   const handleDebug = (domEvent) => {

@@ -6,7 +6,8 @@
   "scripts": {
     "clean": "npx rimraf dist",
     "start": "npx webpack serve --mode development",
-    "build": "npx webpack --config webpack.config.js --mode production",
+    "build": "npx webpack --config webpack.config.js",
+    "build:production": "npx webpack --config webpack.config.js --mode production",
     "deploy": "npm run clean && npm run build && git add . && git commit -m 'npm run deploy' && git push origin main",
     "postdeploy": "npm version patch",
     "prettier": "npx prettier . --write",

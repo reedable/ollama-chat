@@ -1,6 +1,6 @@
 import '@styles/Color.scss';
 import '@styles/Typography.scss';
-import Logger from '@utils/Logger';
+import Logger from '@utils/Logger.js';
 import React from 'react';
 import { createRoot } from 'react-dom/client';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';

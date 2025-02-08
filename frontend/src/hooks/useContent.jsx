@@ -1,6 +1,6 @@
-import isComponent from '@utils/isComponent';
-import Logger from '@utils/Logger';
-import stringToTemplate from '@utils/stringToTemplate';
+import isComponent from '@utils/isComponent.js';
+import Logger from '@utils/Logger.js';
+import stringToTemplate from '@utils/stringToTemplate.js';
 import merge from 'mout/object/merge';
 import { renderToString } from 'react-dom/server';
 
