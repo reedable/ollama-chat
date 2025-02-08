@@ -64,58 +64,23 @@
   animation: BounceBig 1.6s linear infinite;
 }
 
-/* Shimmer */
+/* Collapse */
 
-@mixin Shimmer {
-  background: linear-gradient(
-    -45deg,
-    rgba(255, 255, 255, 0) 0%,
-    rgba(255, 255, 255, 0.4) 40%,
-    rgba(255, 255, 255, 0) 60%
-  );
-  background-size: 300%;
-  background-position-x: 100%;
-  animation: Shimmer 0.6s forwards;
+@mixin Collapse {
+  animation: Collapse 0.4s ease-in-out forwards;
 }
 
-@keyframes Shimmer {
-  0% {
-    background-position-x: 100%;
-  }
-  100% {
-    background-position-x: 0%;
-  }
-}
-
-.Shimmer {
-  @include Shimmer;
-}
-
-.ShimmerOnHover {
-  @media (hover: hover) {
-    &:hover {
-      @include Shimmer;
-    }
-  }
-}
-
-/* Slide-up */
-
-@mixin SlideUp {
-  animation: SlideUp 0.4s ease-out forwards;
-}
-
-@keyframes SlideUp {
+@keyframes Collapse {
   from {
-    transform: translateY(20vh);
-    opacity: 0;
+    max-height: 100vh;
+    transform: scaleY(1);
   }
   to {
-    transform: translateY(0);
-    opacity: 1;
+    max-height: 0;
+    transform: scaleY(0);
   }
 }
 
-.SlideUp {
-  @include SlideUp;
+.Collapse {
+  @include Collapse;
 }

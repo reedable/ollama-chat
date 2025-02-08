@@ -2,9 +2,10 @@ import Conversation from '../models/Conversation.js';
 
 // FIXME #1 Gracefully switch to /generate if MongoDB is unavailable
 export default async function loadConversation(req, res, next) {
-  const { userId, conversationId } = req.body;
+  const { userId } = req.user;
+  const { conversationId } = req.body;
 
-  //await Conversation.deleteOne({ userId });
+  // await Conversation.deleteOne({ userId });
 
   // TODO Load conversation history by userId, conversationId
   let conversation = await Conversation.findOne({ userId });

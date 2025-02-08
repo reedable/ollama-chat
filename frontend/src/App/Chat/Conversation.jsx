@@ -1,3 +1,4 @@
+import SrOnly from '@components/SrOnly.jsx';
 import useContent from '@hooks/useContent.jsx';
 import Logger from '@utils/Logger.js';
 import React, { useEffect, useState } from 'react';
@@ -43,7 +44,9 @@ export default function Conversation() {
 
   return (
     <div className={styles.Conversation}>
-      <h1>{ConversationHeader()}</h1>
+      <SrOnly>
+        <h1>{ConversationHeader()}</h1>
+      </SrOnly>
 
       <ul>
         {conversation.map((exchange) => (

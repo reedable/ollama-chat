@@ -8,10 +8,11 @@ import appContent from '../App.yaml';
 import * as styles from './Exchange.scss';
 import content from './Exchange.yaml';
 import Toolbar from './Toolbar.jsx';
-// import { deleteExchange } from './Exchange.js';
+import { deleteExchange } from './Exchange.js';
 
 export default function Exchange({ exchange, onDelete }) {
   const _logger = new Logger('Exchange');
+  const exchangeRef = useRef(null);
   const promptRef = useRef(null);
   const c = useContent(appContent, content);
 
@@ -19,24 +20,37 @@ export default function Exchange({ exchange, onDelete }) {
     promptRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [exchange.answer]);
 
-  const handleDelete = (exchangeId) => {
+  const handleDelete = async (exchangeId) => {
     try {
-      // await deleteExchange(exchangeId);
-      // TODO Collapse the panel and call onDelete on animationend
-      onDelete(exchangeId);
+      // TODO Give visual indication that deletion is now in progress
+      await deleteExchange(exchangeId);
+
+      setTimeout(() =>
+        exchangeRef.current?.addEventListener(
+          'animationend',
+          () => onDelete(exchangeId),
+          { once: true },
+        ),
+      );
+
+      exchangeRef.current?.classList.add(animation.Collapse);
     } catch (e) {
       _logger.error('Error while calling handleDelete', e);
     }
   };
 
   return (
-    <div className={styles.Exchange} data-exchange-id={exchange.exchangeId}>
+    <div
+      ref={exchangeRef}
+      className={styles.Exchange}
+      data-exchange-id={exchange.exchangeId}
+    >
       <div ref={promptRef} className={`${styles.Bubble} ${styles.Prompt}`}>
         {exchange.prompt}
       </div>
 
       {!exchange.error && !exchange.reasoning && !exchange.answer && (
-        <div class={styles.Status}>
+        <div className={styles.Status}>
           <div className={animation.BounceLoop}>
             <icons.Eye />
           </div>
@@ -45,8 +59,8 @@ export default function Exchange({ exchange, onDelete }) {
       )}
 
       {!exchange.error && exchange.reasoning && !exchange.answer && (
-        <div class={styles.Status}>
-          <div class={animation.BounceLoop}>
+        <div className={styles.Status}>
+          <div className={animation.BounceLoop}>
             <icons.Lightbulb />
           </div>
           <div>{c.reasoningLabel()}</div>
@@ -63,7 +77,7 @@ export default function Exchange({ exchange, onDelete }) {
       )}
 
       {exchange.error && (
-        <div class={styles.Status}>
+        <div className={styles.Status}>
           <div>
             <icons.ExclamationCircleFill />
           </div>

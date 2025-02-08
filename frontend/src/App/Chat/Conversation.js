@@ -8,7 +8,10 @@ export function messagesToConversation(messages) {
         });
       } else {
         const lastExchange = exchanges[exchanges.length - 1];
-        lastExchange.answer = message.content;
+
+        if (lastExchange) {
+          lastExchange.answer = message.content;
+        }
       }
 
       return exchanges;

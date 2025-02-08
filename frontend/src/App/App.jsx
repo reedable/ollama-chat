@@ -4,7 +4,6 @@ import Logger from '@utils/Logger.js';
 import React, { useEffect, useRef } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import * as Styles from './App.scss';
-import HeartbeatProvider from './HeartbeatProvider';
 
 export default function App({ children }) {
   const _logger = new Logger('App');
@@ -57,10 +56,8 @@ export default function App({ children }) {
   }, []);
 
   return (
-    <HeartbeatProvider>
-      <div className={Styles.App} ref={contentRef}>
-        {children}
-      </div>
-    </HeartbeatProvider>
+    <div className={Styles.App} ref={contentRef}>
+      {children}
+    </div>
   );
 }

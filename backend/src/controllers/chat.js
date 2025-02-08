@@ -24,10 +24,15 @@ export default async function chat(req, res) {
 
     for await (const chunk of stream) {
       res.write(chunk.message.content);
+
       if (response) {
         response.content += chunk.message.content;
       } else {
-        response = { role: chunk.message.role, content: chunk.message.content };
+        response = {
+          exchangeId,
+          role: chunk.message.role,
+          content: chunk.message.content,
+        };
       }
     }
 

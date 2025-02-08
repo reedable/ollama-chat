@@ -11,7 +11,7 @@
     "deploy": "npm run clean && npm run build && git add . && git commit -m 'npm run deploy' && git push origin main",
     "postdeploy": "npm version patch",
     "prettier": "npx prettier . --write",
-    "lint": "npx eslint src --ext .js,.jsx"
+    "lint": "npx eslint src --fix"
   },
   "author": "",
   "license": "ISC",

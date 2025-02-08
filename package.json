@@ -17,7 +17,7 @@
     "============ Build ============": "",
     "build": "npm --prefix frontend run build",
     "============ Lint ============": "",
-    "lint": "npx eslint frontend/src"
+    "lint": "npm --prefix frontend run lint && npm --prefix backend run lint"
   },
   "author": "",
   "license": "ISC",

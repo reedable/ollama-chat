@@ -1,7 +1,11 @@
+import Conversation from '../models/Conversation.js';
+
 export async function getConversation(req, res) {
+  const { userId } = req.user;
+
   res.setHeader('Content-Type', 'application/json');
 
-  res.json({
-    messages: req.conversation.messages,
-  });
+  let conversation = await Conversation.findOne({ userId });
+
+  res.json({ messages: conversation.messages });
 }
