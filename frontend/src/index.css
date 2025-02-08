@@ -1,4 +1,9 @@
 :root {
   background-color: var(--color-black);
   color: var(--color-gray-lightest);
+
+  *:focus {
+    box-shadow: 0 0 0.25rem 0.125rem orange; /* Blue glow with 70% opacity */
+    outline: 0.0625rem solid orange;
+  }
 }

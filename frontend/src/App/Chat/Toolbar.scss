@@ -1,0 +1,16 @@
+.Toolbar {
+  align-items: center;
+  color: var(--color-gray);
+  display: flex;
+  gap: 0.5rem;
+  pointer-events: auto;
+
+  &:hover {
+    color: var(--color-white);
+  }
+
+  span {
+    display: inline-block;
+    padding: 0.125rem 0 0 0; //see Charm.scss
+  }
+}

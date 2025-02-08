@@ -58,9 +58,9 @@ export default function UserInput({
 
   const handleSubmit = async (domEvent) => {
     domEvent.preventDefault();
-    const id = uuidv4();
+    const exchangeId = uuidv4();
     const prompt = userInput; //FIXME Sanitize input?
-    const exchange = { id, prompt, answer: '' };
+    const exchange = { exchangeId, prompt, answer: '' };
 
     if (inProgress) {
       try {
@@ -80,21 +80,26 @@ export default function UserInput({
     setInProgress(true);
 
     try {
+      const startTs = Date.now();
       const signal = controllerRef.current?.signal;
       const result = await fetchStream(
         'http://localhost:3000/api/chat',
         {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ prompt: prompt }),
+          body: JSON.stringify({ exchangeId, prompt }),
           signal,
         },
         (reasoning, answer) => {
           exchange.reasoning += reasoning;
           exchange.answer += answer;
+          exchange.startTs = startTs;
+          exchange.endTs = Date.now();
 
           setChatHistory((prevExchanges) =>
-            prevExchanges.map((e) => (e.id === exchange.id ? exchange : e)),
+            prevExchanges.map((e) =>
+              e.exchangeId === exchange.exchangeId ? exchange : e,
+            ),
           );
         },
       );
@@ -107,8 +112,8 @@ export default function UserInput({
       exchange.error = e.t0 || e;
 
       setChatHistory((prevItems) =>
-        prevItems.map((prevItem) =>
-          prevItem.id === exchange.id ? exchange : prevItem,
+        prevItems.map((e) =>
+          e.exchangeId === exchange.exchangeId ? exchange : e,
         ),
       );
     }

@@ -1,7 +1,7 @@
 import DOM from '@utils/DOM';
 import React, { useEffect, useRef } from 'react';
 import * as Styles from './Button.scss';
-import * as AnimationStyles from '@styles/Animation.scss';
+import * as animation from '@styles/Animation.scss';
 
 export default function Button({ className, children, onClick, href, type }) {
   const attr = DOM.attr(arguments[0]);
@@ -14,28 +14,24 @@ export default function Button({ className, children, onClick, href, type }) {
   useEffect(() => {
     const node = animationRef.current;
 
-    const onAnimationEnd = () => {
-      node.classList.remove(AnimationStyles.Bounce);
+    if (!node) {
+      return;
+    }
+
+    const _onAnimationEnd = () => {
+      node.classList.remove(animation.Bounce);
     };
 
-    const onFocus = () => {
-      node.classList.add(AnimationStyles.Bounce);
+    const _onClick = () => {
+      node.classList.add(animation.Bounce);
     };
 
-    const onBlur = () => {
-      node.classList.remove(AnimationStyles.Bounce);
-    };
-
-    node.addEventListener('animationend', onAnimationEnd);
-    node.addEventListener('focus', onFocus);
-    node.addEventListener('click', onFocus);
-    node.addEventListener('blur', onBlur);
+    node.addEventListener('animationend', _onAnimationEnd);
+    node.addEventListener('click', _onClick);
 
     return () => {
-      node.removeEventListener('animationend', onAnimationEnd);
-      node.removeEventListener('focus', onFocus);
-      node.removeEventListener('click', onFocus);
-      node.removeEventListener('blur', onBlur);
+      node.removeEventListener('animationend', _onAnimationEnd);
+      node.removeEventListener('click', _onClick);
     };
   }, []);
 

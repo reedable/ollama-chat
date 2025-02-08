@@ -4,6 +4,8 @@ export default async function loadConversation(req, res, next) {
   try {
     const { userId, conversationId } = req.body;
 
+    //await Conversation.deleteOne({ userId });
+
     // TODO Load conversation history by userId, conversationId
     let conversation = await Conversation.findOne({ userId });
 

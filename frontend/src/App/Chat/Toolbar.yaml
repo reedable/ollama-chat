@@ -1,0 +1,7 @@
+en:
+  copyLabel: Copy ${ASSISTANT_ROLE}'s response
+  debugLabel: Debug
+  deleteLabel: Delete this exchange
+  dislikeLabel: Dislike this response
+  likeLabel: Like this response
+  secondsLabel: ${ts} seconds

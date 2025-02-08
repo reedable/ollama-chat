@@ -6,20 +6,20 @@
 }
 
 .Bubble {
-  max-width: 80%;
-  padding: 0.5rem 0.75rem;
   border-radius: 0.75rem;
+  display: inline-block;
   font-size: 1rem;
   line-height: 1.25;
+  max-width: 80%;
+  padding: 0.5rem 0.75rem;
   word-wrap: break-word;
-  display: inline-block;
 }
 
 .Prompt {
-  background-color: var(--color-gray-lightest);
-  color: var(--color-black);
   align-self: flex-end;
+  background-color: var(--color-gray-lightest);
   border-bottom-right-radius: 0;
+  color: var(--color-black);
 }
 
 .Answer {

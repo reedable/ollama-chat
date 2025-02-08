@@ -4,6 +4,10 @@
   animation: Bounce 0.4s ease-in-out;
 }
 
+@mixin BounceBig {
+  animation: BounceBig 0.4s ease-in-out;
+}
+
 @keyframes Bounce {
   0% {
     transform: scale(1);
@@ -42,6 +46,10 @@
 
 .Bounce {
   @include Bounce;
+}
+
+.BounceBig {
+  @include BounceBig;
 }
 
 .BounceOnHover {

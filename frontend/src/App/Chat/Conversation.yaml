@@ -1,7 +1,2 @@
 en:
-  ChatScreenHeader: ${ChatScreenName}
-  ChatScreenInstructionMessage: >
-    On this page, you can create timestamps that are compatible with
-    ${ChatAppName}. Enter the relative time or wall clock time you want to
-    share in your ${ChatAppName} chat. After entering the timestamp, you can
-    copy and paste it into your chat messages.
+  ConversationHeader: ${ConversationScreenName}

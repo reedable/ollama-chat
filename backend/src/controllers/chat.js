@@ -9,8 +9,8 @@ export default async function chat(req, res) {
     const { conversation } = req;
     const { messages } = conversation;
 
-    const { prompt } = req.body;
-    const message = { role: 'user', content: prompt };
+    const { exchangeId, prompt } = req.body;
+    const message = { exchangeId, role: 'user', content: prompt };
 
     messages.push(message);
 
@@ -29,6 +29,18 @@ export default async function chat(req, res) {
       } else {
         response = { role: chunk.message.role, content: chunk.message.content };
       }
+    }
+
+    // Strip out the reasoning from the history
+    // When the reasoning is part of the history in the subsequent chat, the
+    // response starts to incorporate the structure of the previous reasoning
+    // in the final answer, and it is not pretty.
+    const matches = response.content.match(
+      /(<think>[\s\S]*<\/think>)([\s\S]*)/,
+    );
+
+    if (matches) {
+      response.content = matches[2];
     }
 
     messages.push(response);
