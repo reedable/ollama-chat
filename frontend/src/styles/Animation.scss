@@ -67,17 +67,22 @@
 /* Collapse */
 
 @mixin Collapse {
-  animation: Collapse 0.4s ease-in-out forwards;
+  // animation: Collapse 0.4s ease-in-out forwards;
+  transform: scaleY(0);
 }
 
 @keyframes Collapse {
-  from {
+  0% {
     max-height: 100vh;
-    transform: scaleY(1);
   }
-  to {
+  50% {
+    max-height: 50vh;
+  }
+  75% {
+    max-height: 25vh;
+  }
+  100% {
     max-height: 0;
-    transform: scaleY(0);
   }
 }
 

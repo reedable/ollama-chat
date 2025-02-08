@@ -41,6 +41,7 @@ export default function Toolbar({ exchange, onDelete }) {
   return (
     <div className={styles.Toolbar}>
       <Charm Icon={icons.Copy} label={c.copyLabel()} onClick={handleCopy} />
+      {/*
       <Charm
         Icon={icons.HandThumbsUp}
         label={c.likeLabel()}
@@ -51,12 +52,13 @@ export default function Toolbar({ exchange, onDelete }) {
         label={c.dislikeLabel()}
         onClick={handleDislike}
       />
+      */}
       <Charm
         Icon={icons.XCircle}
         label={c.deleteLabel()}
         onClick={handleDelete}
       />
-      <Charm Icon={icons.Bug} label={c.debugLabel()} onClick={handleDebug} />
+      {/*<Charm Icon={icons.Bug} label={c.debugLabel()} onClick={handleDebug} />*/}
       {exchange.endTs && (
         <span>
           {c.secondsLabel({

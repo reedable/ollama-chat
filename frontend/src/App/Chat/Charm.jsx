@@ -24,7 +24,7 @@ export default function Charm({ Icon, label, onClick }) {
       node.classList.add(animationStyles.Bounce);
     };
 
-    const _onAnimationEnd = () => {
+    const _onAnimationEnd = (domEvent) => {
       node.classList.remove(animationStyles.Bounce);
     };
 

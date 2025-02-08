@@ -8,7 +8,6 @@ import appContent from '../App.yaml';
 import * as styles from './Exchange.scss';
 import content from './Exchange.yaml';
 import Toolbar from './Toolbar.jsx';
-import { deleteExchange } from './Exchange.js';
 
 export default function Exchange({ exchange, onDelete }) {
   const _logger = new Logger('Exchange');
@@ -23,17 +22,30 @@ export default function Exchange({ exchange, onDelete }) {
   const handleDelete = async (exchangeId) => {
     try {
       // TODO Give visual indication that deletion is now in progress
-      await deleteExchange(exchangeId);
+      // await deleteExchange(exchangeId);
+      const clientHeight = exchangeRef.current?.clientHeight;
 
-      setTimeout(() =>
-        exchangeRef.current?.addEventListener(
-          'animationend',
-          () => onDelete(exchangeId),
-          { once: true },
-        ),
+      exchangeRef.current.addEventListener(
+        'transitionend',
+        () => onDelete(exchangeId),
+        { once: true },
       );
 
-      exchangeRef.current?.classList.add(animation.Collapse);
+      exchangeRef.current.style.maxHeight = `${clientHeight}px`;
+      exchangeRef.current.style.opacity = '1';
+      exchangeRef.current.style.overflow = 'hidden';
+      exchangeRef.current.style.transform = 'scaleY(1)';
+      exchangeRef.current.style.transformOrigin = 'top';
+      exchangeRef.current.style.transition = `
+        max-height 0.4s ease-in-out,
+        opacity 0.4s ease-in-out,
+        transform 0.4s ease-in-out`;
+
+      setTimeout(() => {
+        exchangeRef.current.style.maxHeight = '0';
+        exchangeRef.current.style.opacity = '0';
+        exchangeRef.current.style.transform = 'scaleY(0)';
+      });
     } catch (e) {
       _logger.error('Error while calling handleDelete', e);
     }
