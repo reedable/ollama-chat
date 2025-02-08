@@ -8,6 +8,7 @@ import appContent from '../App.yaml';
 import * as styles from './Exchange.scss';
 import content from './Exchange.yaml';
 import Toolbar from './Toolbar.jsx';
+import { deleteExchange } from './Exchange.js';
 
 export default function Exchange({ exchange, onDelete }) {
   const _logger = new Logger('Exchange');
@@ -21,8 +22,7 @@ export default function Exchange({ exchange, onDelete }) {
 
   const handleDelete = async (exchangeId) => {
     try {
-      // TODO Give visual indication that deletion is now in progress
-      // await deleteExchange(exchangeId);
+      deleteExchange(exchangeId);
       const clientHeight = exchangeRef.current?.clientHeight;
 
       exchangeRef.current.addEventListener(
