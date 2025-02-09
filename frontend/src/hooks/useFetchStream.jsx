@@ -32,9 +32,7 @@ export default function useFetchStream() {
 
           if (startReasoning !== -1 && endReasoning == -1) {
             reasoning = split[0];
-          }
-
-          if (endReasoning !== -1) {
+          } else {
             answer = split[1] || split[0];
           }
 
