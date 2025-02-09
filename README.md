@@ -1,6 +1,6 @@
-# ollama-server
+# ollama-chat
 
-An HTTP server/client with Ollama backend.
+A web UI with an Ollama backend.
 
 ## Getting started
 
