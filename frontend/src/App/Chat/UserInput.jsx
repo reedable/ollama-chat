@@ -1,9 +1,8 @@
 import Button from '@components/Button';
 import useContent from '@hooks/useContent.jsx';
-import useFetchStream from '@hooks/useFetchStream';
+import useFetchMultipart from '@hooks/useFetchMultipart';
 import Logger from '@utils/Logger.js';
 import React, { useEffect, useRef, useState } from 'react';
-import { v4 as uuidv4 } from 'uuid';
 import * as styles from './UserInput.scss';
 import content from './UserInput.yaml';
 
@@ -17,7 +16,7 @@ export default function UserInput({
   const [inProgress, setInProgress] = useState(false);
   const userInputRef = useRef(null); // For auto-resizing
   const controllerRef = useRef(null);
-  const [fetchStream] = useFetchStream();
+  const [fetchMultipart] = useFetchMultipart();
   const c = useContent(content);
 
   useEffect(() => {
@@ -61,9 +60,8 @@ export default function UserInput({
 
   const handleSubmit = async (domEvent) => {
     domEvent.preventDefault();
-    const exchangeId = uuidv4();
     const prompt = userInput; //FIXME Sanitize input?
-    const exchange = { exchangeId, prompt, answer: '' };
+    const exchange = { prompt, answer: '' };
 
     if (inProgress) {
       try {
@@ -79,46 +77,55 @@ export default function UserInput({
       return;
     }
 
-    setConversation([...conversation, exchange]);
-    setInProgress(true);
-
     try {
       const startTs = Date.now();
+      setInProgress(true);
+
       const signal = controllerRef.current?.signal;
-      const result = await fetchStream(
-        'http://localhost:3000/api/chat',
+      const result = await fetchMultipart(
+        'http://localhost:3000/api/user/conversation/exchange',
         {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ exchangeId, prompt }),
+          body: JSON.stringify({ prompt }),
           signal,
         },
-        (reasoning, answer) => {
-          exchange.reasoning += reasoning;
-          exchange.answer += answer;
-          exchange.startTs = startTs;
+        (response) => {
+          conversation.exchanges.push({
+            exchangeId: response._id,
+            prompt: response.messages[0].content,
+            answer: response.messages[1].content,
+            startTs,
+          });
+
+          setConversation({
+            ...conversation,
+          });
+
+          setUserInput('');
+        },
+        (text) => {
+          const exchange =
+            conversation.exchanges[conversation.exchanges.length - 1];
+          exchange.answer += text;
           exchange.endTs = Date.now();
 
-          setConversation((prevExchanges) =>
-            prevExchanges.map((e) =>
-              e.exchangeId === exchange.exchangeId ? exchange : e,
-            ),
-          );
+          setConversation({
+            ...conversation,
+          });
+        },
+        (text) => {
+          // TODO DeepSeek answer
+          _logger.log('callback[2]', text);
         },
       );
 
-      setInProgress(false);
-      setUserInput('');
       console.debug(result);
     } catch (e) {
       // TODO Implement better error handling
       exchange.error = e.t0 || e;
-
-      setConversation((prevItems) =>
-        prevItems.map((e) =>
-          e.exchangeId === exchange.exchangeId ? exchange : e,
-        ),
-      );
+    } finally {
+      setInProgress(false);
     }
   };
 

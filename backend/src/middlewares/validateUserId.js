@@ -1,12 +1,24 @@
-export default async function (req, res, next) {
-  const { userId } = req.body;
+import { User } from '../models/Schema.js';
 
-  if (!userId) {
+export default async function (req, res, next) {
+  let { username } = req.body;
+
+  if (!username) {
     //FIXME return res.status(401).end();
-    req.user = { userId: 'demo' };
+    username = 'demo';
   }
 
   //TODO Validate userId
+  let user = await User.findOne({ username });
+
+  if (!user) {
+    // FIXME For now, automatically create a user record
+    user = new User({ username, conversations: [] });
+  }
+
+  await user.save();
+
+  req.user = user;
 
   next();
 }
