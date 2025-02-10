@@ -1,11 +1,13 @@
-import Conversation from '../models/Conversation.js';
+import { Conversation } from '../models/Schema.js';
 
 export async function getConversation(req, res) {
-  const { userId } = req.user;
+  const { user } = req;
 
   res.setHeader('Content-Type', 'application/json');
 
-  let conversation = await Conversation.findOne({ userId });
+  const conversation = await Conversation.findOne({
+    userId: user._id,
+  }).populate('exchanges');
 
-  res.json({ messages: conversation.messages });
+  res.json(conversation);
 }

@@ -16,7 +16,8 @@
     "express": "^4.21.2",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.9.6",
-    "ollama": "^0.5.12"
+    "ollama": "^0.5.12",
+    "uuid": "^11.0.5"
   },
   "devDependencies": {
     "eslint": "^9.19.0"
