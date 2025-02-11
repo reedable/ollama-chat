@@ -5,6 +5,7 @@ import Logger from '@utils/Logger.js';
 import React, { useEffect, useRef, useState } from 'react';
 import * as styles from './UserInput.scss';
 import content from './UserInput.yaml';
+import { ChatStatus, useChatStatus } from '../../context/ChatStatusContext';
 
 export default function UserInput({
   userInput,
@@ -13,11 +14,12 @@ export default function UserInput({
   setConversation,
 }) {
   const _logger = new Logger('UserInput');
-  const [inProgress, setInProgress] = useState(false);
-  const userInputRef = useRef(null); // For auto-resizing
+  const c = useContent(content);
+  const textareaRef = useRef(null); // For auto-resizing
   const controllerRef = useRef(null);
   const [fetchMultipart] = useFetchMultipart();
-  const c = useContent(content);
+  const { chatStatus, setChatStatus } = useChatStatus();
+  const [networkStatus, setNetworkStatus] = useState(false);
 
   useEffect(() => {
     if (!controllerRef.current) {
@@ -26,13 +28,40 @@ export default function UserInput({
   }, []);
 
   useEffect(() => {
-    if (inProgress === false) {
-      userInputRef.current?.focus();
-    }
-  }, [inProgress]);
+    setNetworkStatus(
+      [
+        ChatStatus.Sending,
+        ChatStatus.Posted,
+        ChatStatus.Reasoning,
+        ChatStatus.Answering,
+      ].indexOf(chatStatus) !== -1,
+    );
+  }, [chatStatus]);
 
   useEffect(() => {
-    const textarea = userInputRef.current;
+    if (chatStatus === ChatStatus.Done) {
+      setChatStatus(ChatStatus.Idle);
+    }
+  }, [chatStatus]);
+
+  useEffect(() => {
+    if (!networkStatus) {
+      textareaRef.current?.focus();
+    }
+  }, [networkStatus]);
+
+  useEffect(() => {
+    if (
+      chatStatus === ChatStatus.Posted ||
+      chatStatus === ChatStatus.Reasoning ||
+      chatStatus === ChatStatus.Answering
+    ) {
+      setUserInput('');
+    }
+  }, [chatStatus]);
+
+  useEffect(() => {
+    const textarea = textareaRef.current;
 
     if (!textarea) {
       return;
@@ -58,19 +87,21 @@ export default function UserInput({
     }
   }, [userInput]);
 
+  const handleCancel = async (domEvent) => {
+    domEvent.preventDefault();
+
+    try {
+      return controllerRef.current?.abort();
+    } finally {
+      controllerRef.current = new AbortController();
+      setChatStatus(ChatStatus.Idle);
+    }
+  };
+
   const handleSubmit = async (domEvent) => {
     domEvent.preventDefault();
     const prompt = userInput; //FIXME Sanitize input?
     const exchange = { prompt, answer: '' };
-
-    if (inProgress) {
-      try {
-        return controllerRef.current?.abort();
-      } finally {
-        controllerRef.current = new AbortController();
-        setInProgress(false);
-      }
-    }
 
     if (!prompt) {
       alert('Please enter a prompt.');
@@ -79,7 +110,7 @@ export default function UserInput({
 
     try {
       const startTs = Date.now();
-      setInProgress(true);
+      setChatStatus(ChatStatus.Sending);
 
       const signal = controllerRef.current?.signal;
       const result = await fetchMultipart(
@@ -98,49 +129,44 @@ export default function UserInput({
             startTs,
           });
 
-          setConversation({
-            ...conversation,
-          });
-
-          setUserInput('');
+          setConversation({ ...conversation });
+          setChatStatus(ChatStatus.Posted);
         },
         (text) => {
+          // FIXME DeepSeek reasoning
           const exchange =
             conversation.exchanges[conversation.exchanges.length - 1];
           exchange.answer += text;
           exchange.endTs = Date.now();
 
-          setConversation({
-            ...conversation,
-          });
+          setConversation({ ...conversation });
+          setChatStatus(ChatStatus.Answering);
         },
-        (text) => {
-          // TODO DeepSeek answer
-          _logger.log('callback[2]', text);
-        },
+        // FIXME DeepSeek answering
       );
-
-      console.debug(result);
     } catch (e) {
       // TODO Implement better error handling
       exchange.error = e.t0 || e;
     } finally {
-      setInProgress(false);
+      setChatStatus(ChatStatus.Done);
     }
   };
 
   return (
-    <form className={styles.UserInput} onSubmit={handleSubmit}>
+    <form
+      className={styles.UserInput}
+      onSubmit={networkStatus ? handleCancel : handleSubmit}
+    >
       {/* TODO Turn textarea into a component */}
       <textarea
-        ref={userInputRef}
+        ref={textareaRef}
         rows="1"
         value={userInput}
-        disabled={inProgress}
+        disabled={networkStatus}
         onChange={(domEvent) => setUserInput(domEvent.target.value)}
       ></textarea>
       <Button type="submit">
-        {inProgress ? c.abortLabel() : c.submitLabel()}
+        {networkStatus ? c.cancelLabel() : c.submitLabel()}
       </Button>
     </form>
   );

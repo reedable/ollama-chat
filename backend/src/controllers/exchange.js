@@ -31,7 +31,6 @@ export async function postExchange(req, res) {
   }
 
   // Query the LLM and stream AI assistant response
-  // TODO if (deepseek-R1) split <think> into multipart message
 
   try {
     res.write(`--${boundary}\r\n`);
@@ -52,6 +51,8 @@ export async function postExchange(req, res) {
       messages,
       stream: true,
     });
+
+    // TODO if (deepseek-R1) split <think> into multipart message
 
     for await (const chunk of stream) {
       res.write(chunk.message.content);

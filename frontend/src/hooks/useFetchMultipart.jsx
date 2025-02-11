@@ -34,8 +34,6 @@ export default function useFetchMultipart() {
       const [index, chunk] = value;
       if (done) break;
 
-      console.log(`[useFetchMultipart] ${index}`, chunk);
-
       if (typeof callback[index] === 'function') {
         callback[index](chunk);
       }

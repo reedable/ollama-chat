@@ -1,19 +1,22 @@
 import SrOnly from '@components/SrOnly.jsx';
 import useContent from '@hooks/useContent.jsx';
 import Logger from '@utils/Logger.js';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import appContent from '../App.yaml';
 import { transformConversation } from './Conversation.js';
 import * as styles from './Conversation.scss';
 import content from './Conversation.yaml';
 import Exchange from './Exchange.jsx';
 import UserInput from './UserInput.jsx';
+import { ChatStatus, useChatStatus } from '../../context/ChatStatusContext.jsx';
 
 export default function Conversation() {
   const _logger = new Logger('Conversation');
   const { ConversationHeader } = useContent(appContent, content);
   const [conversation, setConversation] = useState([]);
   const [userInput, setUserInput] = useState('');
+  const { chatStatus } = useChatStatus();
+  const userInputFeedbackRef = useRef(null);
 
   // TODO Manage conversation state so we can show intro screen
   //      - conversation === null
@@ -41,6 +44,14 @@ export default function Conversation() {
     })();
   }, []);
 
+  useEffect(() => {
+    _logger.log(`chatStatus ${chatStatus.description}`);
+
+    if (chatStatus === ChatStatus.Sending) {
+      userInputFeedbackRef.current?.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, [chatStatus]);
+
   const handleDeleteExchange = async (exchangeId) => {
     conversation.exchanges = conversation.exchanges.filter(
       (e) => e.exchangeId !== exchangeId,
@@ -63,6 +74,9 @@ export default function Conversation() {
             ></Exchange>
           </li>
         ))}
+        {chatStatus === ChatStatus.Sending && (
+          <li ref={userInputFeedbackRef}>Sending...</li>
+        )}
       </ul>
 
       <UserInput
