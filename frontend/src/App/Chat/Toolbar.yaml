@@ -1,4 +1,5 @@
 en:
+  collapseLabel: Collapse ${ASSISTANT_ROLE}'s response
   copyLabel: Copy ${ASSISTANT_ROLE}'s response
   debugLabel: Debug
   deleteLabel: Delete this exchange

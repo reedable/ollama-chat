@@ -1,51 +1,79 @@
 import useContent from '@hooks/useContent.jsx';
-import * as animation from '@styles/Animation.scss';
 import Logger from '@utils/Logger.js';
 import React, { useEffect, useRef } from 'react';
 import * as icons from 'react-bootstrap-icons';
 import ReactMarkdown from 'react-markdown';
+import animate from '../../utils/animate.js';
 import appContent from '../App.yaml';
+import { deleteExchange } from './Exchange.js';
 import * as styles from './Exchange.scss';
 import content from './Exchange.yaml';
 import Toolbar from './Toolbar.jsx';
-import { deleteExchange } from './Exchange.js';
 
 export default function Exchange({ exchange, onDelete }) {
   const _logger = new Logger('Exchange');
   const exchangeRef = useRef(null);
   const promptRef = useRef(null);
+  const answerRef = useRef(null);
   const c = useContent(appContent, content);
 
   useEffect(() => {
     promptRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [exchange.answer]);
 
+  const handleCollapse = async (domEvent) => {
+    const el = answerRef.current;
+
+    if (el) {
+      const clientHeight = answerRef.current?.clientHeight;
+
+      await animate(el)
+        .from({
+          maxHeight: `${clientHeight}px`,
+          overflow: 'hidden',
+          transformOrigin: 'top',
+        })
+        .to({ maxHeight: '2rem' });
+    }
+  };
+
+  const handleExpand = async (domEvent) => {
+    const el = answerRef.current;
+
+    if (el) {
+      const clientHeight = el.clientHeight;
+      const scrollHeight = el.scrollHeight;
+
+      await animate(el)
+        .from({ maxHeight: `${clientHeight}px` })
+        .to({ maxHeight: `${scrollHeight}px` });
+    }
+  };
+
   const handleDelete = async (exchangeId) => {
     try {
-      deleteExchange(exchangeId);
-      const clientHeight = exchangeRef.current?.clientHeight;
+      const el = exchangeRef.current;
 
-      exchangeRef.current.addEventListener(
-        'transitionend',
-        () => onDelete(exchangeId),
-        { once: true },
-      );
+      if (el) {
+        const clientHeight = el.clientHeight;
 
-      exchangeRef.current.style.maxHeight = `${clientHeight}px`;
-      exchangeRef.current.style.opacity = '1';
-      exchangeRef.current.style.overflow = 'hidden';
-      exchangeRef.current.style.transform = 'scaleY(1)';
-      exchangeRef.current.style.transformOrigin = 'top';
-      exchangeRef.current.style.transition = `
-        max-height 0.4s ease-in-out,
-        opacity 0.4s ease-in-out,
-        transform 0.4s ease-in-out`;
+        deleteExchange(exchangeId);
 
-      setTimeout(() => {
-        exchangeRef.current.style.maxHeight = '0';
-        exchangeRef.current.style.opacity = '0';
-        exchangeRef.current.style.transform = 'scaleY(0)';
-      });
+        await animate(el)
+          .from({
+            maxHeight: `${clientHeight}px`,
+            opacity: '1',
+            transform: 'scaleY(1)',
+            transformOrigin: 'top',
+          })
+          .to({
+            maxHeight: '0',
+            opacity: '0',
+            transform: 'scaleY(0)',
+          });
+      }
+
+      onDelete(exchangeId);
     } catch (e) {
       _logger.error('Error while calling handleDelete', e);
     }
@@ -63,7 +91,7 @@ export default function Exchange({ exchange, onDelete }) {
 
       {!exchange.error && !exchange.reasoning && !exchange.answer && (
         <div className={styles.Status}>
-          <div className={animation.BounceLoop}>
+          <div className={animate.BounceLoop}>
             <icons.Eye />
           </div>
           <div>{c.waitingLabel()}</div>
@@ -72,7 +100,7 @@ export default function Exchange({ exchange, onDelete }) {
 
       {!exchange.error && exchange.reasoning && !exchange.answer && (
         <div className={styles.Status}>
-          <div className={animation.BounceLoop}>
+          <div className={animate.BounceLoop}>
             <icons.Lightbulb />
           </div>
           <div>{c.reasoningLabel()}</div>
@@ -81,10 +109,15 @@ export default function Exchange({ exchange, onDelete }) {
 
       {exchange.answer && (
         <>
-          <div className={`${styles.Answer}`}>
+          <div ref={answerRef} className={`${styles.Answer}`}>
             <ReactMarkdown>{exchange.answer}</ReactMarkdown>
           </div>
-          <Toolbar exchange={exchange} onDelete={handleDelete} />
+          <Toolbar
+            exchange={exchange}
+            onDelete={handleDelete}
+            onCollapse={handleCollapse}
+            onExpand={handleExpand}
+          />
         </>
       )}
 

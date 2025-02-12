@@ -31,11 +31,11 @@ export default function useFetchMultipart() {
 
     while (true) {
       const { done, value } = await reader.read();
-      const [index, chunk] = value;
+      const [index, chunk, header] = value;
       if (done) break;
 
       if (typeof callback[index] === 'function') {
-        callback[index](chunk);
+        callback[index](chunk, header);
       }
     }
   }

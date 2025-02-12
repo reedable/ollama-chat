@@ -3,11 +3,13 @@ import { getConversation } from '../controllers/conversation.js';
 import { deleteExchange, postExchange } from '../controllers/exchange.js';
 import prepareConversation from '../middlewares/prepareConversation.js';
 import prepareExchange from '../middlewares/prepareExchange.js';
+import prepareLogger from '../middlewares/prepareLogger.js';
 import sanitizePrompt from '../middlewares/sanitizePrompt.js';
 import validateUserId from '../middlewares/validateUserId.js';
 
 const router = express.Router();
 
+router.use(prepareLogger);
 router.use(validateUserId);
 
 router.get('/user/conversation', prepareConversation, getConversation);

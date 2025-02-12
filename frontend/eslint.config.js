@@ -11,10 +11,13 @@ export default [
       ecmaVersion: 'latest',
       sourceType: 'module',
       globals: {
-        fetch: 'readonly',
-        navigator: 'readonly',
-        document: 'readonly',
         console: 'readonly',
+        fetch: 'readonly',
+        document: 'readonly',
+        describe: 'readonly',
+        expect: 'readonly',
+        navigator: 'readonly',
+        test: 'readonly',
       },
     },
     plugins: {

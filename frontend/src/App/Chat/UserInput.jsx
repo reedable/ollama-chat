@@ -121,7 +121,7 @@ export default function UserInput({
           body: JSON.stringify({ prompt }),
           signal,
         },
-        (response) => {
+        (response, header) => {
           conversation.exchanges.push({
             exchangeId: response._id,
             prompt: response.messages[0].content,
@@ -132,8 +132,24 @@ export default function UserInput({
           setConversation({ ...conversation });
           setChatStatus(ChatStatus.Posted);
         },
-        (text) => {
-          // FIXME DeepSeek reasoning
+        (text, header) => {
+          const exchange =
+            conversation.exchanges[conversation.exchanges.length - 1];
+
+          exchange.endTs = Date.now();
+
+          if (/application\/reasoning/.test(header)) {
+            exchange.reasoning += text;
+            setChatStatus(ChatStatus.Reasoning);
+          } else {
+            exchange.answer += text;
+            setChatStatus(ChatStatus.Answering);
+          }
+
+          setConversation({ ...conversation });
+        },
+        (text, header) => {
+          // FIXME consolidate all callbacks into one
           const exchange =
             conversation.exchanges[conversation.exchanges.length - 1];
           exchange.answer += text;
@@ -142,7 +158,6 @@ export default function UserInput({
           setConversation({ ...conversation });
           setChatStatus(ChatStatus.Answering);
         },
-        // FIXME DeepSeek answering
       );
     } catch (e) {
       // TODO Implement better error handling

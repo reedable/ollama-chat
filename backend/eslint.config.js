@@ -9,8 +9,11 @@ export default [
       ecmaVersion: 'latest',
       sourceType: 'module',
       globals: {
-        console: 'readonly',
+        AbortController: 'readonly',
+        expect: 'readonly',
+        describe: 'readonly',
         process: 'readonly',
+        test: 'readonly',
       },
     },
     plugins: {

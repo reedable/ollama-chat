@@ -1,16 +1,17 @@
 import useContent from '@hooks/useContent.jsx';
 import Clipboard from '@utils/Clipboard.js';
 import Logger from '@utils/Logger.js';
-import React from 'react';
+import React, { useState } from 'react';
 import * as icons from 'react-bootstrap-icons';
 import appContent from '../App.yaml';
 import Charm from './Charm.jsx';
 import * as styles from './Toolbar.scss';
 import content from './Toolbar.yaml';
 
-export default function Toolbar({ exchange, onDelete }) {
+export default function Toolbar({ exchange, onDelete, onCollapse, onExpand }) {
   const _logger = new Logger('Toolbar');
   const c = useContent(appContent, content);
+  const [isCollapsed, setIsCollapsed] = useState(false);
 
   const handleCopy = async (domEvent) => {
     try {
@@ -38,8 +39,23 @@ export default function Toolbar({ exchange, onDelete }) {
     _logger.debug('DEBUG', domEvent);
   };
 
+  const handleCollapse = () => {
+    setIsCollapsed(true);
+    onCollapse();
+  };
+
+  const handleExpand = () => {
+    setIsCollapsed(false);
+    onExpand();
+  };
+
   return (
     <div className={styles.Toolbar}>
+      <Charm
+        Icon={isCollapsed ? icons.ChevronDown : icons.ChevronUp}
+        label={isCollapsed ? c.collapseLabel() : c.collapseLabel()}
+        onClick={isCollapsed ? handleExpand : handleCollapse}
+      />
       <Charm Icon={icons.Copy} label={c.copyLabel()} onClick={handleCopy} />
       {/*
       <Charm

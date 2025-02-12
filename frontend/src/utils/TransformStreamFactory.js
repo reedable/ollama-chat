@@ -89,7 +89,7 @@ export function createPartHandlerStream(contentType, marshaller) {
         // We have the full payload for the content we are watching
         try {
           const object = marshaller(_buffer);
-          controller.enqueue([_index, object]);
+          controller.enqueue([_index, object, header]);
         } finally {
           _buffer = '';
           _index = null;
@@ -100,7 +100,7 @@ export function createPartHandlerStream(contentType, marshaller) {
         _buffer += text;
         _index = index;
       } else {
-        controller.enqueue([index, text]);
+        controller.enqueue([index, text, header]);
       }
     },
   });
