@@ -1,4 +1,5 @@
 import useContent from '@hooks/useContent.jsx';
+import * as animationStyles from '@styles/Animation.scss';
 import Logger from '@utils/Logger.js';
 import React, { useEffect, useRef } from 'react';
 import * as icons from 'react-bootstrap-icons';
@@ -91,7 +92,7 @@ export default function Exchange({ exchange, onDelete }) {
 
       {!exchange.error && !exchange.reasoning && !exchange.answer && (
         <div className={styles.Status}>
-          <div className={animate.BounceLoop}>
+          <div className={animationStyles.BounceLoop}>
             <icons.Eye />
           </div>
           <div>{c.waitingLabel()}</div>
@@ -100,7 +101,7 @@ export default function Exchange({ exchange, onDelete }) {
 
       {!exchange.error && exchange.reasoning && !exchange.answer && (
         <div className={styles.Status}>
-          <div className={animate.BounceLoop}>
+          <div className={animationStyles.BounceLoop}>
             <icons.Lightbulb />
           </div>
           <div>{c.reasoningLabel()}</div>

@@ -28,5 +28,9 @@
     "eslint-plugin-import": "^2.31.0",
     "eslint-plugin-react": "^7.37.4",
     "eslint-plugin-unused-imports": "^4.1.4"
+  },
+  "dependencies": {
+    "lodash.debounce": "^4.0.8",
+    "lodash.throttle": "^4.1.1"
   }
 }

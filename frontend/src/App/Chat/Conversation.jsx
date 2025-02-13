@@ -74,10 +74,13 @@ export default function Conversation() {
             ></Exchange>
           </li>
         ))}
-        {chatStatus === ChatStatus.Sending && (
-          <li ref={userInputFeedbackRef}>Sending...</li>
-        )}
       </ul>
+
+      {chatStatus === ChatStatus.Sending && (
+        <div ref={userInputFeedbackRef} className={styles.Status}>
+          <div>Sending...</div>
+        </div>
+      )}
 
       <UserInput
         userInput={userInput}

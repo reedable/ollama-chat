@@ -2,10 +2,11 @@ import Button from '@components/Button';
 import useContent from '@hooks/useContent.jsx';
 import useFetchMultipart from '@hooks/useFetchMultipart';
 import Logger from '@utils/Logger.js';
-import React, { useEffect, useRef, useState } from 'react';
+import debounce from 'lodash.debounce';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { ChatStatus, useChatStatus } from '../../context/ChatStatusContext';
 import * as styles from './UserInput.scss';
 import content from './UserInput.yaml';
-import { ChatStatus, useChatStatus } from '../../context/ChatStatusContext';
 
 export default function UserInput({
   userInput,
@@ -20,6 +21,36 @@ export default function UserInput({
   const [fetchMultipart] = useFetchMultipart();
   const { chatStatus, setChatStatus } = useChatStatus();
   const [networkStatus, setNetworkStatus] = useState(false);
+
+  const adjustTextareaHeight = useCallback(() => {
+    const textarea = textareaRef.current;
+
+    if (!textarea) {
+      return;
+    }
+
+    const rootFontSize = parseFloat(
+      getComputedStyle(document.documentElement).fontSize,
+    );
+
+    const styles = getComputedStyle(textarea);
+    const paddingTop = parseFloat(styles.paddingTop);
+    const paddingBottom = parseFloat(styles.paddingBottom);
+    const padding = paddingTop + paddingBottom;
+
+    const lastHeight = textarea.style.height;
+    textarea.style.height = 'auto';
+
+    const scrollHeight = textarea.scrollHeight;
+    const targetHeightPx = scrollHeight - padding;
+    const targetHeightRem = targetHeightPx / rootFontSize;
+
+    if (targetHeightRem) {
+      textarea.style.height = `${targetHeightRem}rem`;
+    }
+  });
+
+  useEffect(() => adjustTextareaHeight, [userInput]);
 
   useEffect(() => {
     if (!controllerRef.current) {
@@ -60,33 +91,6 @@ export default function UserInput({
     }
   }, [chatStatus]);
 
-  useEffect(() => {
-    const textarea = textareaRef.current;
-
-    if (!textarea) {
-      return;
-    }
-
-    const rootFontSize = parseFloat(
-      getComputedStyle(document.documentElement).fontSize,
-    );
-
-    const styles = getComputedStyle(textarea);
-    const paddingTop = parseFloat(styles.paddingTop);
-    const paddingBottom = parseFloat(styles.paddingBottom);
-    const padding = paddingTop + paddingBottom;
-
-    textarea.style.height = 'auto';
-
-    const scrollHeight = textarea.scrollHeight;
-    const targetHeightPx = scrollHeight - padding;
-    const targetHeightRem = targetHeightPx / rootFontSize;
-
-    if (targetHeightRem) {
-      textarea.style.height = `${targetHeightRem}rem`;
-    }
-  }, [userInput]);
-
   const handleCancel = async (domEvent) => {
     domEvent.preventDefault();
 
@@ -122,41 +126,32 @@ export default function UserInput({
           signal,
         },
         (response, header) => {
-          conversation.exchanges.push({
-            exchangeId: response._id,
-            prompt: response.messages[0].content,
-            answer: response.messages[1].content,
-            startTs,
-          });
+          //FIXME parse X-Content-Type if(/record\/exchange/.test(header)) {
+          if (typeof response === 'object') {
+            conversation.exchanges.push({
+              exchangeId: response._id,
+              prompt: response.messages[0].content,
+              answer: response.messages[1].content,
+              startTs,
+            });
 
-          setConversation({ ...conversation });
-          setChatStatus(ChatStatus.Posted);
-        },
-        (text, header) => {
-          const exchange =
-            conversation.exchanges[conversation.exchanges.length - 1];
-
-          exchange.endTs = Date.now();
-
-          if (/application\/reasoning/.test(header)) {
-            exchange.reasoning += text;
-            setChatStatus(ChatStatus.Reasoning);
+            setChatStatus(ChatStatus.Posted);
           } else {
-            exchange.answer += text;
-            setChatStatus(ChatStatus.Answering);
+            const index = conversation.exchanges.length - 1;
+            const exchange = conversation.exchanges[index];
+
+            exchange.endTs = Date.now();
+
+            if (/application\/reasoning/.test(header)) {
+              exchange.reasoning += response;
+              setChatStatus(ChatStatus.Reasoning);
+            } else {
+              exchange.answer += response;
+              setChatStatus(ChatStatus.Answering);
+            }
           }
 
           setConversation({ ...conversation });
-        },
-        (text, header) => {
-          // FIXME consolidate all callbacks into one
-          const exchange =
-            conversation.exchanges[conversation.exchanges.length - 1];
-          exchange.answer += text;
-          exchange.endTs = Date.now();
-
-          setConversation({ ...conversation });
-          setChatStatus(ChatStatus.Answering);
         },
       );
     } catch (e) {

@@ -6,7 +6,7 @@ import {
 } from '../utils/TransformStreamFactory';
 
 export default function useFetchMultipart() {
-  async function fetchMultipart(url, request, ...callback) {
+  async function fetchMultipart(url, request, callback) {
     const response = await fetch(url, request);
 
     if (!response.ok || !response.body) {
@@ -34,8 +34,8 @@ export default function useFetchMultipart() {
       const [index, chunk, header] = value;
       if (done) break;
 
-      if (typeof callback[index] === 'function') {
-        callback[index](chunk, header);
+      if (typeof callback === 'function') {
+        callback(chunk, header);
       }
     }
   }

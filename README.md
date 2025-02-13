@@ -47,6 +47,17 @@ brew services start mongodb/brew/mongodb-community
 
 The MongoDB server listens on port 27017.
 
+## Set up .env
+
+ollama-chat server uses `.env` to manage its environmental variables. Define your own environmental variables to run the server. Here's an example.
+
+```
+cat <<EOD >> backend/.env
+PORT=3000
+MODEL_NAME=mistral
+EOD
+```
+
 ## Start the frontend and backend servers
 
 Run the following command:
