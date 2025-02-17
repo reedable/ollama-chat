@@ -14,6 +14,8 @@ This project is being tested with `deepseek-R1:7B` and `mistral`. Both are 7B mo
 - deepseek-R1:7b
 - mistral
 
+Note: There are concerns around DeepSeek app’s privacy practices and censorship in their model. This project does not depend on the DeepSeek app. There is no need to download their app. About the censorship: Every model is biased in some way. Please keep in mind the model trainers’ bias in its output.
+
 ### Prerequisites
 
 - Homebrew
