@@ -35,3 +35,13 @@
   display: flex;
   gap: 0.5rem;
 }
+
+.Debug {
+  display: flex;
+  flex-direction: row-reverse;
+  font-size: 0.875rem;
+
+  & > div {
+    width: 87.5%;
+  }
+}

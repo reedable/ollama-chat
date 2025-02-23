@@ -24,6 +24,14 @@ const router = createBrowserRouter(
         </App>
       ),
     },
+    {
+      path: '/tab',
+      element: (
+        <App>
+          <Chat />
+        </App>
+      ),
+    },
   ],
   { basename: BASENAME },
 );

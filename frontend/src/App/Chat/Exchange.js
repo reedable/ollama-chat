@@ -1,6 +1,8 @@
 export async function deleteExchange(exchangeId) {
+  const { REACT_APP_API_URL } = process.env;
+
   const response = await fetch(
-    'http://localhost:3000/api/user/conversation/exchange',
+    `${REACT_APP_API_URL}/api/user/conversation/exchange`,
     {
       method: 'DELETE',
       headers: { 'Content-Type': 'application/json' },

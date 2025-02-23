@@ -11,6 +11,10 @@
 
   .Status {
     display: flex;
-    flex-direction: row-reverse;
+    gap: 0.5rem;
+  }
+
+  .Fill {
+    flex-grow: 1;
   }
 }

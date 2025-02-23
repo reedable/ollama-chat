@@ -1,18 +1,21 @@
 import SrOnly from '@components/SrOnly.jsx';
 import useContent from '@hooks/useContent.jsx';
+import * as animationStyles from '@styles/Animation.scss';
 import Logger from '@utils/Logger.js';
 import React, { useEffect, useRef, useState } from 'react';
+import * as icons from 'react-bootstrap-icons';
+import { ChatStatus, useChatStatus } from '../../context/ChatStatusContext.jsx';
 import appContent from '../App.yaml';
 import { transformConversation } from './Conversation.js';
 import * as styles from './Conversation.scss';
 import content from './Conversation.yaml';
 import Exchange from './Exchange.jsx';
 import UserInput from './UserInput.jsx';
-import { ChatStatus, useChatStatus } from '../../context/ChatStatusContext.jsx';
 
 export default function Conversation() {
+  const { REACT_APP_API_URL } = process.env;
   const _logger = new Logger('Conversation');
-  const { ConversationHeader } = useContent(appContent, content);
+  const c = useContent(appContent, content);
   const [conversation, setConversation] = useState([]);
   const [userInput, setUserInput] = useState('');
   const { chatStatus } = useChatStatus();
@@ -31,7 +34,7 @@ export default function Conversation() {
   useEffect(() => {
     (async function getData() {
       const response = await fetch(
-        'http://localhost:3000/api/user/conversation',
+        `${REACT_APP_API_URL}/api/user/conversation`,
         {
           method: 'GET',
           headers: { 'Content-Type': 'application/json' },
@@ -62,7 +65,7 @@ export default function Conversation() {
   return (
     <div className={styles.Conversation}>
       <SrOnly>
-        <h1>{ConversationHeader()}</h1>
+        <h1>{c.ConversationHeader()}</h1>
       </SrOnly>
 
       <ul>
@@ -78,7 +81,11 @@ export default function Conversation() {
 
       {chatStatus === ChatStatus.Sending && (
         <div ref={userInputFeedbackRef} className={styles.Status}>
-          <div>Sending...</div>
+          <div className={styles.Fill}></div>
+          <div className={animationStyles.BounceLoop}>
+            <icons.Send />
+          </div>
+          <div>{c.sendingLabel()}</div>
         </div>
       )}
 

@@ -1,7 +1,7 @@
 import useContent from '@hooks/useContent.jsx';
 import * as animationStyles from '@styles/Animation.scss';
 import Logger from '@utils/Logger.js';
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import * as icons from 'react-bootstrap-icons';
 import ReactMarkdown from 'react-markdown';
 import animate from '../../utils/animate.js';
@@ -10,13 +10,18 @@ import { deleteExchange } from './Exchange.js';
 import * as styles from './Exchange.scss';
 import content from './Exchange.yaml';
 import Toolbar from './Toolbar.jsx';
+import remarkMath from 'remark-math';
+import rehypeKatex from 'rehype-katex';
+import 'katex/dist/katex.min.css'; // Import KaTeX styles
 
 export default function Exchange({ exchange, onDelete }) {
   const _logger = new Logger('Exchange');
   const exchangeRef = useRef(null);
   const promptRef = useRef(null);
   const answerRef = useRef(null);
+  const debugRef = useRef(null);
   const c = useContent(appContent, content);
+  const [isDebug, setIsDebug] = useState(false);
 
   useEffect(() => {
     promptRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -80,6 +85,11 @@ export default function Exchange({ exchange, onDelete }) {
     }
   };
 
+  const handleDebug = async (isDebug) => {
+    _logger.debug(`handleDebug isDebug=${isDebug}`);
+    setIsDebug(isDebug);
+  };
+
   return (
     <div
       ref={exchangeRef}
@@ -110,14 +120,26 @@ export default function Exchange({ exchange, onDelete }) {
 
       {exchange.answer && (
         <>
-          <div ref={answerRef} className={`${styles.Answer}`}>
-            <ReactMarkdown>{exchange.answer}</ReactMarkdown>
+          <div ref={answerRef} className={styles.Answer}>
+            <ReactMarkdown
+              children={exchange.answer}
+              remarkPlugins={[remarkMath]}
+              rehypePlugins={[rehypeKatex]}
+            ></ReactMarkdown>
           </div>
+          {isDebug && (
+            <div className={styles.Debug} ref={debugRef}>
+              <div>
+                <ReactMarkdown>{exchange.reasoning}</ReactMarkdown>
+              </div>
+            </div>
+          )}
           <Toolbar
             exchange={exchange}
             onDelete={handleDelete}
             onCollapse={handleCollapse}
             onExpand={handleExpand}
+            onDebug={handleDebug}
           />
         </>
       )}

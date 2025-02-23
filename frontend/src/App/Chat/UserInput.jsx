@@ -14,6 +14,7 @@ export default function UserInput({
   conversation,
   setConversation,
 }) {
+  const { REACT_APP_API_URL } = process.env;
   const _logger = new Logger('UserInput');
   const c = useContent(content);
   const textareaRef = useRef(null); // For auto-resizing
@@ -118,7 +119,7 @@ export default function UserInput({
 
       const signal = controllerRef.current?.signal;
       const result = await fetchMultipart(
-        'http://localhost:3000/api/user/conversation/exchange',
+        `${REACT_APP_API_URL}/api/user/conversation/exchange`,
         {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },

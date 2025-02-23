@@ -1,8 +1,8 @@
-const path = require('path');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
+const Dotenv = require('dotenv-webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const { version } = require('./package.json');
-// const { v4: uuidv4 } = require('uuid');
+const fs = require('fs');
+const path = require('path');
 
 module.exports = {
   mode: 'development',
@@ -69,6 +69,7 @@ module.exports = {
     ],
   },
   plugins: [
+    new Dotenv(),
     new HtmlWebpackPlugin({
       template: './public/index.ejs',
       inlineSource: '.(js|css)$',
@@ -95,11 +96,21 @@ module.exports = {
     },
   },
   devServer: {
-    // contentBase: path.resolve(__dirname, 'docs'),
+    port: 8080,
+    historyApiFallback: true,
+    open: false,
+    hot: true,
+    server: {
+      type: 'https',
+      options: {
+        key: fs.readFileSync(path.resolve(__dirname, '..', 'cert', 'key.pem')),
+        cert: fs.readFileSync(
+          path.resolve(__dirname, '..', 'cert', 'cert.pem'),
+        ),
+      },
+    },
     static: {
       directory: path.resolve(__dirname, './docs'),
     },
-    historyApiFallback: true,
-    hot: true,
   },
 };

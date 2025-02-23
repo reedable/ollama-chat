@@ -1,2 +1,3 @@
 en:
   ConversationHeader: ${ConversationScreenName}
+  sendingLabel: Sending...

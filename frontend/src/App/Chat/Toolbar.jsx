@@ -8,10 +8,17 @@ import Charm from './Charm.jsx';
 import * as styles from './Toolbar.scss';
 import content from './Toolbar.yaml';
 
-export default function Toolbar({ exchange, onDelete, onCollapse, onExpand }) {
+export default function Toolbar({
+  exchange,
+  onDelete,
+  onCollapse,
+  onExpand,
+  onDebug,
+}) {
   const _logger = new Logger('Toolbar');
   const c = useContent(appContent, content);
   const [isCollapsed, setIsCollapsed] = useState(false);
+  const [isDebug, setIsDebug] = useState(false);
 
   const handleCopy = async (domEvent) => {
     try {
@@ -36,7 +43,8 @@ export default function Toolbar({ exchange, onDelete, onCollapse, onExpand }) {
   };
 
   const handleDebug = (domEvent) => {
-    _logger.debug('DEBUG', domEvent);
+    onDebug(!isDebug);
+    setIsDebug((x) => !x);
   };
 
   const handleCollapse = () => {
@@ -74,7 +82,11 @@ export default function Toolbar({ exchange, onDelete, onCollapse, onExpand }) {
         label={c.deleteLabel()}
         onClick={handleDelete}
       />
-      {/*<Charm Icon={icons.Bug} label={c.debugLabel()} onClick={handleDebug} />*/}
+      <Charm
+        Icon={isDebug ? icons.BugFill : icons.Bug}
+        label={c.debugLabel()}
+        onClick={handleDebug}
+      />
       {exchange.endTs && (
         <span>
           {c.secondsLabel({
