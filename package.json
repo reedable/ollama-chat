@@ -21,7 +21,12 @@
     "============ Build ============": "",
     "build": "npm --prefix frontend run build",
     "============ Lint ============": "",
-    "lint": "npm --prefix frontend run lint && npm --prefix backend run lint"
+    "lint": "npm --prefix frontend run lint && npm --prefix backend run lint",
+    "============ Teams ============": "",
+    "stop:teams": "pkill 'Teams'",
+    "debug:teams": "npx concurrently 'npm run stop:teams' 'npm run debug:teams:remote' 'npm run debug:chrome:remote'",
+    "debug:teams:remote": "open -a 'Microsoft Teams' --args --remote-debugging-port=9222",
+    "debug:chrome:remote": "open -a 'Google Chrome' 'chrome://inspect/#devices'"
   },
   "author": "",
   "license": "ISC",
