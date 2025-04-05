@@ -126,7 +126,10 @@ export async function postExchange(req, res) {
     logger.debug('Finished streaming response');
   } catch (error) {
     // TODO Flag the exchange as error
-    logger.error({ error }, 'Error generating response');
+    logger.error(
+      { error, message: error.message, stack: error.stack },
+      'Error generating response',
+    );
     res.status(500).end();
   } finally {
     logger.debug('Saving exchange data');

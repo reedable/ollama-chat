@@ -8,6 +8,7 @@ import 'reset-css';
 import App from './App/App';
 import Chat from './App/Chat/Chat.jsx';
 import './index.css';
+import Tab from './App/Tab.jsx';
 
 const BASENAME = '/';
 const _logger = new Logger('index');
@@ -27,9 +28,11 @@ const router = createBrowserRouter(
     {
       path: '/tab',
       element: (
-        <App>
-          <Chat />
-        </App>
+        <Tab>
+          <App>
+            <Chat />
+          </App>
+        </Tab>
       ),
     },
   ],

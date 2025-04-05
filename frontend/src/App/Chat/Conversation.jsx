@@ -68,16 +68,18 @@ export default function Conversation() {
         <h1>{c.ConversationHeader()}</h1>
       </SrOnly>
 
-      <ul>
-        {conversation.exchanges?.map((exchange) => (
-          <li key={exchange.exchangeId}>
-            <Exchange
-              exchange={exchange}
-              onDelete={handleDeleteExchange}
-            ></Exchange>
-          </li>
-        ))}
-      </ul>
+      {conversation.exchanges?.length > 0 && (
+        <ul>
+          {conversation.exchanges?.map((exchange) => (
+            <li key={exchange.exchangeId}>
+              <Exchange
+                exchange={exchange}
+                onDelete={handleDeleteExchange}
+              ></Exchange>
+            </li>
+          ))}
+        </ul>
+      )}
 
       {chatStatus === ChatStatus.Sending && (
         <div ref={userInputFeedbackRef} className={styles.Status}>
