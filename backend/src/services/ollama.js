@@ -1,3 +1,5 @@
 import { Ollama } from 'ollama';
 
-export default new Ollama();
+const { OLLAMA_URI } = process.env;
+
+export default new Ollama({ host: OLLAMA_URI });

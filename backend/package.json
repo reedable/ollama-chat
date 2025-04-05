@@ -7,6 +7,7 @@
   "scripts": {
     "start": "node server",
     "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
+    "build:image": "docker build -t ollama-chat-backend .",
     "lint": "npx eslint src --fix"
   },
   "author": "",

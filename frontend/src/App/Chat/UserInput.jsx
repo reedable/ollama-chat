@@ -7,6 +7,7 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { ChatStatus, useChatStatus } from '../../context/ChatStatusContext';
 import * as styles from './UserInput.scss';
 import content from './UserInput.yaml';
+import { useTeamsContext } from '../Tab.jsx';
 
 export default function UserInput({
   userInput,
@@ -22,6 +23,7 @@ export default function UserInput({
   const [fetchMultipart] = useFetchMultipart();
   const { chatStatus, setChatStatus } = useChatStatus();
   const [networkStatus, setNetworkStatus] = useState(false);
+  const teamsContext = useTeamsContext();
 
   const adjustTextareaHeight = useCallback(() => {
     const textarea = textareaRef.current;

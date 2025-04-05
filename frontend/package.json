@@ -8,7 +8,8 @@
     "start": "npx webpack serve --mode development",
     "build": "npx webpack --config webpack.config.js",
     "build:production": "npx webpack --config webpack.config.js --mode production",
-    "deploy": "npm run clean && npm run build && git add . && git commit -m 'npm run deploy' && git push origin main",
+    "build:image": "docker build -t ollama-chat-frontend .",
+    "deploy": "echo \"Implement me\"",
     "postdeploy": "npm version patch",
     "prettier": "npx prettier . --write",
     "lint": "npx eslint src --fix"
@@ -16,6 +17,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@microsoft/teams-js": "^2.34.0",
     "dotenv": "^16.4.7",
     "hammerjs": "^2.0.8",
     "json-stable-stringify": "^1.1.1",
@@ -52,6 +54,7 @@
     "html-webpack-plugin": "^5.6.0",
     "js-yaml": "^4.1.0",
     "prettier": "^3.3.3",
+    "rimraf": "^6.0.1",
     "sass": "^1.77.8",
     "sass-loader": "^16.0.0",
     "source-map": "^0.7.4",

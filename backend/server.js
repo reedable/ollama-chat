@@ -11,7 +11,8 @@ import logger from './src/services/logger.js';
 // Load and validate .env
 dotenv.config();
 
-const { PORT, HTTPS, SSL_KEY_FILESPEC, SSL_CERT_FILESPEC } = process.env;
+const { PORT, HTTPS, SSL_KEY_FILESPEC, SSL_CERT_FILESPEC, MONGO_URI } =
+  process.env;
 
 // Resolve __dirname in ES Modules
 const __filename = fileURLToPath(import.meta.url);
@@ -31,7 +32,7 @@ app.use(express.static(path.join(__dirname, '..', 'frontend', 'dist')));
 app.use(express.static(path.join(__dirname, '..', 'frontend', 'public')));
 
 mongoose
-  .connect('mongodb://localhost:27017/ollama-db')
+  .connect(MONGO_URI) // 'mongodb://localhost:27017/ollama-db'
   .then(() => logger.info('Connected to MongoDB'))
   .catch((error) => logger.error({ error }, 'MongoDB connection failure'));
 
