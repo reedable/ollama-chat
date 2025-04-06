@@ -22,9 +22,11 @@ Note: There are concerns around DeepSeek app’s privacy practices and censorshi
 - Node.js
 - NPM
 
-### Install and run Ollama with DeepSeek
+### Install and run Ollama with Mistral/DeepSeek
 
 Ollama is an open-source framework for running large language models (LLMs) locally on your machine without relying on cloud-based APIs. It allows you to load and run AI models, supporting features like streaming responses via HTTP. Ollama is sessionless by default; each API call to ollama.chat does not maintain conversation history.
+
+Ollama supports many models, but this project was specifically written and tested with Mistral and DeepSeek.
 
 ```
 brew install ollama
@@ -48,6 +50,8 @@ brew services start mongodb/brew/mongodb-community
 ```
 
 The MongoDB server listens on port 27017.
+
+If you would rather run MongoDB on Docker, you can certainly do that instead. The performance of MongoDB is not critical in this context. Any performance bottleneck you might face comes from running the models on Ollama. You might have to tweak some node scripts if you go down that route.
 
 ## Set up .env
 
