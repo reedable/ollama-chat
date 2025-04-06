@@ -1,10 +1,10 @@
-import DOM from '@utils/DOM.js';
+import { getAttr, getClassNames } from '@utils/DOM.js';
 import React, { useEffect, useRef } from 'react';
 import * as Styles from './Button.scss';
 import * as animation from '@styles/Animation.scss';
 
 export default function Button({ className, children, onClick, href, type }) {
-  const attr = DOM.attr(arguments[0]);
+  const attr = getAttr(arguments[0]);
   const animationRef = useRef();
 
   if (href) {
@@ -47,7 +47,7 @@ export default function Button({ className, children, onClick, href, type }) {
   return (
     <button
       ref={animationRef}
-      className={DOM.classNames(className, Styles.Button)}
+      className={getClassNames(className, Styles.Button)}
       type={type || 'button'}
       onClick={_onClick}
       {...attr}

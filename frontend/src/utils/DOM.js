@@ -1,5 +1,9 @@
 import Arrays from '@utils/Arrays.js';
 
+export const REM = parseFloat(
+  getComputedStyle(document.documentElement).fontSize,
+);
+
 function reduceEntries(object, [key, value]) {
   object[key] = value;
   return object;
@@ -14,14 +18,8 @@ function filterEntries([key, _value]) {
   );
 }
 
-const attr = (props) =>
+export const getAttr = (props) =>
   Object.entries(props).filter(filterEntries).reduce(reduceEntries, {});
 
-const classNames = (...classNames) => Arrays.pack(...classNames).join(' ');
-
-const DOM = {
-  attr,
-  classNames,
-};
-
-export default DOM;
+export const getClassNames = (...classNames) =>
+  Arrays.pack(...classNames).join(' ');

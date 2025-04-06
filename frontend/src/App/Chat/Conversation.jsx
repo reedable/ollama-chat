@@ -1,6 +1,7 @@
 import SrOnly from '@components/SrOnly.jsx';
 import useContent from '@hooks/useContent.jsx';
 import * as animationStyles from '@styles/Animation.scss';
+import { REM } from '@utils/DOM.js';
 import Logger from '@utils/Logger.js';
 import React, { useEffect, useRef, useState } from 'react';
 import * as icons from 'react-bootstrap-icons';
@@ -51,7 +52,12 @@ export default function Conversation() {
     _logger.log(`chatStatus ${chatStatus.description}`);
 
     if (chatStatus === ChatStatus.Sending) {
-      userInputFeedbackRef.current?.scrollTo(0, 32); //FIXME calculate px from rem
+      const el = userInputFeedbackRef.current;
+
+      if (el) {
+        const top = el.getBoundingClientRect().top + window.scrollY - 1.5 * REM;
+        window.scrollTo({ top, behavior: 'smooth' });
+      }
     }
   }, [chatStatus]);
 
