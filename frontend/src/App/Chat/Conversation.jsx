@@ -51,7 +51,7 @@ export default function Conversation() {
     _logger.log(`chatStatus ${chatStatus.description}`);
 
     if (chatStatus === ChatStatus.Sending) {
-      userInputFeedbackRef.current?.scrollIntoView({ behavior: 'smooth' });
+      userInputFeedbackRef.current?.scrollTo(0, 32); //FIXME calculate px from rem
     }
   }, [chatStatus]);
 
@@ -78,17 +78,19 @@ export default function Conversation() {
               ></Exchange>
             </li>
           ))}
-        </ul>
-      )}
 
-      {chatStatus === ChatStatus.Sending && (
-        <div ref={userInputFeedbackRef} className={styles.Status}>
-          <div className={styles.Fill}></div>
-          <div className={animationStyles.BounceLoop}>
-            <icons.Send />
-          </div>
-          <div>{c.sendingLabel()}</div>
-        </div>
+          {chatStatus === ChatStatus.Sending && (
+            <li>
+              <div ref={userInputFeedbackRef} className={styles.Status}>
+                <div className={styles.Fill}></div>
+                <div className={animationStyles.BounceLoop}>
+                  <icons.Send />
+                </div>
+                <div>{c.sendingLabel()}</div>
+              </div>
+            </li>
+          )}
+        </ul>
       )}
 
       <UserInput
