@@ -30,6 +30,7 @@ export default function Exchange({ exchange, onDelete }) {
     if (el) {
       const top = el.getBoundingClientRect().top + window.scrollY - 1.5 * REM;
       window.scrollTo({ top, behavior: 'smooth' });
+      el.classList.add(styles.Expand);
     }
   }, []);
 
