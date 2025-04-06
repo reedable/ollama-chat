@@ -25,7 +25,7 @@ export default function Exchange({ exchange, onDelete }) {
 
   useEffect(() => {
     promptRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [exchange.answer]);
+  }, []);
 
   const handleCollapse = async (domEvent) => {
     const el = answerRef.current;
