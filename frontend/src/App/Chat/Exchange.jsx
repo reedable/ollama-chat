@@ -141,15 +141,16 @@ export default function Exchange({ exchange, onDelete }) {
               </div>
             </div>
           )}
-          <Toolbar
-            exchange={exchange}
-            onDelete={handleDelete}
-            onCollapse={handleCollapse}
-            onExpand={handleExpand}
-            onDebug={handleDebug}
-          />
         </>
       )}
+
+      <Toolbar
+        exchange={exchange}
+        onDelete={handleDelete}
+        onCollapse={handleCollapse}
+        onExpand={handleExpand}
+        onDebug={handleDebug}
+      />
 
       {exchange.error && (
         <div className={styles.Status}>

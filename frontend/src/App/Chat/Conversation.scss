@@ -8,7 +8,7 @@
     flex-direction: column;
     gap: 2rem;
 
-    li:last-child {
+    & > li:last-child {
       min-height: 100vh;
     }
   }
