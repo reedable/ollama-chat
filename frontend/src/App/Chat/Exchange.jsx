@@ -1,18 +1,19 @@
 import useContent from '@hooks/useContent.jsx';
 import * as animationStyles from '@styles/Animation.scss';
+import { REM } from '@utils/DOM.js';
 import Logger from '@utils/Logger.js';
+import 'katex/dist/katex.min.css'; // Import KaTeX styles
 import React, { useEffect, useRef, useState } from 'react';
 import * as icons from 'react-bootstrap-icons';
 import ReactMarkdown from 'react-markdown';
+import rehypeKatex from 'rehype-katex';
+import remarkMath from 'remark-math';
 import animate from '../../utils/animate.js';
 import appContent from '../App.yaml';
 import { deleteExchange } from './Exchange.js';
 import * as styles from './Exchange.scss';
 import content from './Exchange.yaml';
 import Toolbar from './Toolbar.jsx';
-import remarkMath from 'remark-math';
-import rehypeKatex from 'rehype-katex';
-import 'katex/dist/katex.min.css'; // Import KaTeX styles
 
 export default function Exchange({ exchange, onDelete }) {
   const _logger = new Logger('Exchange');
@@ -24,7 +25,12 @@ export default function Exchange({ exchange, onDelete }) {
   const [isDebug, setIsDebug] = useState(false);
 
   useEffect(() => {
-    promptRef.current?.scrollIntoView({ behavior: 'smooth' });
+    const el = promptRef.current;
+
+    if (el) {
+      const top = el.getBoundingClientRect().top + window.scrollY - 1.5 * REM;
+      window.scrollTo({ top, behavior: 'smooth' });
+    }
   }, []);
 
   const handleCollapse = async (domEvent) => {
