@@ -11,8 +11,16 @@
   font-size: 1rem;
   line-height: 1.25;
   max-width: 80%;
+  overflow: hidden;
   padding: 0.5rem 0.75rem;
+  transform: scale(0.84);
+  transform-origin: top right;
+  transition: transform 0.1s ease-in;
   word-wrap: break-word;
+
+  &.Expand {
+    transform: scale(1);
+  }
 }
 
 .Prompt {
