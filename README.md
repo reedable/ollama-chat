@@ -78,7 +78,7 @@ http://localhost:8080
 
 #### DeepSeek-R1
 
-DeepSeek with 7B parameters demonstrates better reasoning capabilities, though its response is noticeably slow.
+DeepSeek with 7B parameters demonstrates better reasoning capabilities, though its response is noticeably slow. In this example, the ultimate answer is incorrect, but it shows the reasoning steps it took to arrive at the final answer. Side note: The reasoning does identify that the man "checks where his soup is and finds it has been moved" but does not correctly identify this first location as the microwave. The accuracy of the model's output here is a bit of a red herring, of course, because the `ollama-chat` project's purpose has more to do with providing the user interface to the underlying Ollama server.
 
 <picture>
   <source
